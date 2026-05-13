@@ -21,17 +21,23 @@
       color: #aef;
       font-size: 1.2rem;
     }
-    #clock {
+#clock-link {
       position: fixed;
       top: 16px;
       right: 20px;
+      text-decoration: none;
+    }
+    #clock {
       font-size: 1rem;
       color: #aaa;
+    }
+    #clock-link:hover #clock {
+      color: #aef;
     }
   </style>
 </head>
 <body>
-  <div id="clock"></div>
+  <a id="clock-link" href="/time"><div id="clock"></div></a>
   <h1>Welcome to My page! (I'm Jonas btw)</h1>
   <p><a href="/socials">View my socials →</a></p>
 
