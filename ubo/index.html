@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>uBlock Origin — Download</title>
+  <title>uBlock Origin (unoffical)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -11,69 +11,32 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* LIGHT THEME */
-:root {
-  --red-50: #FDE8E8;
-  --red-100: #F8B4B4;
-  --red-400: #E02424;
-  --red-600: #C81E1E;
-  --red-800: #9B1C1C;
-
-  --amber-50: #FAEEDA;
-  --amber-600: #854F0B;
-  --amber-800: #633806;
-
-  --gray-50: #F5F5F3;
-  --gray-100: #EBEBEA;
-  --gray-300: #C4C4C1;
-  --gray-500: #888780;
-  --gray-700: #444441;
-  --gray-900: #1A1A18;
-
-  --green-400: #1D9E75;
-
-  --text: #1A1A18;
-  --text-muted: #666664;
-  --text-subtle: #999997;
-
-  --bg: #FAFAF8;
-  --surface: #FFFFFF;
-
-  --border: rgba(0,0,0,0.08);
-  --border-strong: rgba(0,0,0,0.14);
-
-  --radius: 10px;
-  --radius-lg: 14px;
-}
-
-/* DARK THEME */
-body.dark {
-  --bg: #0f0f0f;
-  --surface: #171717;
-
-  --text: #f5f5f3;
-  --text-muted: #b3b3b3;
-  --text-subtle: #8a8a8a;
-
-  --gray-50: #1a1a1a;
-  --gray-100: #222222;
-  --gray-300: #2e2e2e;
-  --gray-500: #666666;
-  --gray-700: #aaaaaa;
-  --gray-900: #ffffff;
-
-  --border: rgba(255,255,255,0.08);
-  --border-strong: rgba(255,255,255,0.15);
-}
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-  }
-
-  .card {
-    background: var(--surface);
-  }
+    :root {
+--red-50: #FDE8E8;
+--red-100: #F8B4B4;
+--red-400: #E02424;
+--red-600: #C81E1E;
+--red-800: #9B1C1C;
+      --amber-50: #FAEEDA;
+      --amber-600: #854F0B;
+      --amber-800: #633806;
+      --gray-50: #F5F5F3;
+      --gray-100: #EBEBEA;
+      --gray-300: #C4C4C1;
+      --gray-500: #888780;
+      --gray-700: #444441;
+      --gray-900: #1A1A18;
+      --green-400: #1D9E75;
+      --text: #1A1A18;
+      --text-muted: #666664;
+      --text-subtle: #999997;
+      --bg: #FAFAF8;
+      --surface: #FFFFFF;
+      --border: rgba(0,0,0,0.08);
+      --border-strong: rgba(0,0,0,0.14);
+      --radius: 10px;
+      --radius-lg: 14px;
+    }
     .ai-badge {
   display: inline-flex;
   align-items: center;
@@ -252,38 +215,6 @@ body.dark {
       border-color: var(--red-600);
     }
     .btn.btn-primary:hover { background: var(--red-800); border-color: var(--red-800); }
-  @media (prefers-color-scheme: dark) {
-  .detected-badge {
-    background: #1f1f1f;
-    border: 1px solid rgba(255,255,255,0.12);
-  }
-
-  .ai-badge {
-    background: #2a1f10;
-    border: 1px solid #4a3418;
-    color: #ffd28a;
-  }
-
-.btn {
-  background: var(--surface);
-  border: 1px solid var(--border-strong);
-  color: var(--text);
-}
-
-.btn:hover {
-  background: var(--gray-50);
-}
-
-.btn.btn-primary {
-  background: var(--red-600);
-  border-color: var(--red-600);
-  color: #fff;
-}
-
-.btn.btn-primary:hover {
-  background: var(--red-800);
-  border-color: var(--red-800);
-}
 
     /* Note */
     .note {
@@ -335,8 +266,8 @@ body.dark {
     alt="uBlock Origin logo"
   />
   <span class="logo-name">uBlock Origin</span>
-  <button class="btn" id="themeToggle">🌙 Dark Mode</button>
 </div>
+
   <h1 class="headline">Block ads &amp; trackers,<br>free and open-source.</h1>
   <p class="subline">Wide-spectrum content blocking with low CPU and memory usage.</p>
   <div class="ai-badge">
@@ -575,21 +506,6 @@ body.dark {
 
     render();
   })();
-</script>
- <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const btn = document.getElementById("themeToggle");
-
-    btn.addEventListener("click", () => {
-      document.body.classList.toggle("dark");
-
-      if (document.body.classList.contains("dark")) {
-        btn.textContent = "☀️ Light Mode";
-      } else {
-        btn.textContent = "🌙 Dark Mode";
-      }
-    });
-  });
 </script>
 
 </body>
