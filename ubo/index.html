@@ -58,22 +58,19 @@
   --radius-lg: 14px;
 }
 
-/* DARK MODE MUST BE OUTSIDE :root */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0f0f0f;
-    --surface: #171717;
+body.dark {
+  --bg: #0f0f0f;
+  --surface: #171717;
+  --text: #f5f5f3;
+  --text-muted: #b3b3b3;
+  --text-subtle: #8a8a8a;
 
-    --text: #f5f5f3;
-    --text-muted: #b3b3b3;
-    --text-subtle: #8a8a8a;
+  --gray-50: #1f1f1f;
+  --gray-100: #2a2a2a;
 
-    --gray-50: #1f1f1f;
-    --gray-100: #2a2a2a;
-
-    --border: rgba(255,255,255,0.08);
-    --border-strong: rgba(255,255,255,0.15);
-  }
+  --border: rgba(255,255,255,0.08);
+  --border-strong: rgba(255,255,255,0.15);
+}
 
   body {
     background: var(--bg);
@@ -344,8 +341,8 @@
     alt="uBlock Origin logo"
   />
   <span class="logo-name">uBlock Origin</span>
+  <button class="btn" id="themeToggle">🌙 Dark Mode</button>
 </div>
-
   <h1 class="headline">Block ads &amp; trackers,<br>free and open-source.</h1>
   <p class="subline">Wide-spectrum content blocking with low CPU and memory usage.</p>
   <div class="ai-badge">
@@ -584,6 +581,21 @@
 
     render();
   })();
+</script>
+ <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const btn = document.getElementById("themeToggle");
+
+    btn.addEventListener("click", () => {
+      document.body.classList.toggle("dark");
+
+      if (document.body.classList.contains("dark")) {
+        btn.textContent = "☀️ Light Mode";
+      } else {
+        btn.textContent = "🌙 Dark Mode";
+      }
+    });
+  });
 </script>
 
 </body>
