@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>uBlock Origin — Download</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-50: #E1F5EE;
+      --green-100: #9FE1CB;
+      --green-400: #1D9E75;
+      --green-600: #0F6E56;
+      --green-800: #085041;
+      --amber-50: #FAEEDA;
+      --amber-600: #854F0B;
+      --amber-800: #633806;
+      --gray-50: #F5F5F3;
+      --gray-100: #EBEBEA;
+      --gray-300: #C4C4C1;
+      --gray-500: #888780;
+      --gray-700: #444441;
+      --gray-900: #1A1A18;
+      --text: #1A1A18;
+      --text-muted: #666664;
+      --text-subtle: #999997;
+      --bg: #FAFAF8;
+      --surface: #FFFFFF;
+      --border: rgba(0,0,0,0.08);
+      --border-strong: rgba(0,0,0,0.14);
+      --radius: 10px;
+      --radius-lg: 14px;
+    }
+    .ai-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 1.5rem;
+  padding: 6px 12px;
+
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+
+  color: #854F0B;
+  background: #FAEEDA;
+  border: 1px solid #F3D39A;
+  border-radius: 999px;
+}
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    .section {
+      width: 100%;
+      max-width: 560px;
+    }
+
+    /* Logo */
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 2.5rem;
+    }
+    .logo-icon {
+      width: 38px;
+      height: 38px;
+    }
+    .logo-name {
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--text);
+    }
+
+    /* Headline */
+    .headline {
+      font-size: 32px;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 0.6rem;
+    }
+    .subline {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-bottom: 1.75rem;
+      line-height: 1.5;
+    }
+<div class="ai-badge">MOST PARTS OF THIS PAGE IS AI GENERATED</div>
+
+    /* Detected badge */
+    .detected-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-family: 'DM Mono', monospace;
+      color: var(--text-subtle);
+      background: var(--gray-100);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 4px 10px;
+      margin-bottom: 1.5rem;
+    }
+    .detected-badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green-400);
+      flex-shrink: 0;
+    }
+
+    /* Cards */
+    .cards { display: flex; flex-direction: column; gap: 10px; }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .card:hover { border-color: var(--border-strong); box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+    .card.primary {
+      border-color: var(--green-400);
+      background: linear-gradient(135deg, #FAFFFE 0%, #F0FBF7 100%);
+    }
+    .card.primary:hover { border-color: var(--green-600); box-shadow: 0 2px 16px rgba(29,158,117,0.12); }
+    .card.disabled { opacity: 0.6; }
+
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .card-icon.green { background: var(--green-50); }
+    .card-icon.gray { background: var(--gray-50); }
+    .card-icon.amber { background: var(--amber-50); }
+
+    .card-body { flex: 1; min-width: 0; }
+    .card-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 2px;
+    }
+    .card-desc {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    .badge {
+      font-size: 10.5px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 5px;
+      letter-spacing: 0.01em;
+    }
+    .badge-green { background: var(--green-50); color: var(--green-600); }
+    .badge-amber { background: var(--amber-50); color: var(--amber-600); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 9px 16px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border-strong);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: background 0.13s, border-color 0.13s, transform 0.1s;
+    }
+    .btn:hover { background: var(--gray-50); }
+    .btn:active { transform: scale(0.97); }
+    .btn.btn-primary {
+      background: var(--green-600);
+      color: #fff;
+      border-color: var(--green-600);
+    }
+    .btn.btn-primary:hover { background: var(--green-800); border-color: var(--green-800); }
+
+    /* Note */
+    .note {
+      margin-top: 1.25rem;
+      padding: 0.9rem 1.1rem;
+      background: #FFFBF0;
+      border: 1px solid #FAC775;
+      border-radius: var(--radius);
+      font-size: 12.5px;
+      color: var(--amber-800);
+      line-height: 1.55;
+      display: none;
+    }
+    .note a { color: var(--green-600); font-weight: 600; text-decoration: none; }
+    .note a:hover { text-decoration: underline; }
+    .note-icon { display: inline-block; margin-right: 5px; vertical-align: -1px; }
+
+    /* Divider */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 1.75rem 0;
+    }
+
+    /* Footer */
+    .footer {
+      font-size: 12px;
+      color: var(--text-subtle);
+      line-height: 1.5;
+    }
+    .footer a { color: var(--text-muted); text-decoration: none; }
+    .footer a:hover { color: var(--text); }
+
+    @media (max-width: 480px) {
+      .headline { font-size: 26px; }
+      .card { flex-wrap: wrap; }
+      .btn { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<main class="section">
+
+  <div class="logo">
+    <svg class="logo-icon" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="38" height="38" rx="9" fill="#E1F5EE"/>
+      <path d="M19 6L30 11.5V21C30 26.5 25.2 31.2 19 33C12.8 31.2 8 26.5 8 21V11.5Z" fill="#1D9E75"/>
+      <path d="M14.5 19.5L17.8 22.8L23.5 16" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span class="logo-name">uBlock Origin</span>
+  </div>
+
+  <h1 class="headline">Block ads &amp; trackers,<br>free and open-source.</h1>
+  <p class="subline">Wide-spectrum content blocking with low CPU and memory usage.</p>
+
+  <div class="detected-badge">
+    <span class="dot"></span>
+    <span id="browser-label">Detecting browser…</span>
+  </div>
+
+  <div class="cards" id="cards"></div>
+
+  <div class="note" id="note"></div>
+
+  <hr class="divider" />
+
+  <p class="footer">
+    uBlock Origin is free, open-source, and accepts no donations. &middot;
+    <a href="https://github.com/gorhill/uBlock" target="_blank" rel="noopener">Source on GitHub</a>
+  </p>
+
+</main>
+
+<script>
+  (function () {
+    const LINKS = {
+      firefox:  'https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/',
+      brave:    'https://chromewebstore.google.com/detail/ublock-origin/cjpalhdlnbpafiamejdnhcphjbkeiagm',
+      edge:     'https://microsoftedge.microsoft.com/addons/detail/ublock-origin/odfafepnkmbhccpbejgmiehpchacaeak',
+      opera:    'https://addons.opera.com/en/extensions/details/ublock/',
+      ubo:      'https://chromewebstore.google.com/detail/ublock-origin/cjpalhdlnbpafiamejdnhcphjbkeiagm',
+      ubol:     'https://chromewebstore.google.com/detail/ublock-origin-lite/ddkjiahejlhfcafbddmgiahcphecmpfh',
+      firefox_dl: 'https://www.mozilla.org/firefox/',
+    };
+
+    function detect() {
+      const ua = navigator.userAgent;
+      const vendor = navigator.vendor || '';
+      if (/Edg\//.test(ua))   return 'edge';
+      if (/OPR\/|Opera\//.test(ua)) return 'opera';
+      if (/Firefox\//.test(ua)) return 'firefox';
+      if (/Brave/.test(ua))   return 'brave';
+      if (/Chrome\//.test(ua) && /Google Inc/.test(vendor)) return 'chrome';
+      if (/Safari\//.test(ua) && /Apple/.test(vendor)) return 'safari';
+      return 'other';
+    }
+
+    function icon(paths, color) {
+      return `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">${paths.map(p => `<path d="${p}" stroke="${color}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>`).join('')}</svg>`;
+    }
+
+    const ICONS = {
+      shield:    ['M10 2L17 5V10C17 14 13.9 17.4 10 18.5C6.1 17.4 3 14 3 10V5Z'],
+      shieldH:   ['M10 2L17 5V10C17 14 13.9 17.4 10 18.5C6.1 17.4 3 14 3 10V5Z', 'M10 2V18.5'],
+      download:  ['M10 3V13', 'M6 9L10 13L14 9', 'M3 16H17'],
+      arrow:     ['M4 10H16', 'M11 5L16 10L11 15'],
+    };
+
+    function shieldSvg(color, half) {
+      return `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 2L17 5V10C17 14 13.9 17.4 10 18.5C6.1 17.4 3 14 3 10V5Z" stroke="${color}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        ${half ? `<path d="M10 2V18.5" stroke="${color}" stroke-width="1.6" stroke-linecap="round"/>` : ''}
+      </svg>`;
+    }
+
+    function downloadSvg(color) {
+      return `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M8 2V10" stroke="${color}" stroke-width="1.6" stroke-linecap="round"/>
+        <path d="M5 7L8 10L11 7" stroke="${color}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M2 13H14" stroke="${color}" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>`;
+    }
+
+    function card({ primary, iconHtml, iconBg, title, badge, badgeClass, desc, link, btnLabel, btnPrimary, disabled }) {
+      return `
+        <div class="card${primary ? ' primary' : ''}${disabled ? ' disabled' : ''}">
+          <div class="card-icon ${iconBg}">${iconHtml}</div>
+          <div class="card-body">
+            <div class="card-title">
+              ${title}
+              ${badge ? `<span class="badge ${badgeClass}">${badge}</span>` : ''}
+            </div>
+            <div class="card-desc">${desc}</div>
+          </div>
+          ${disabled
+            ? `<span style="font-size:12px;color:var(--text-subtle);white-space:nowrap;">Not available</span>`
+            : `<a class="btn${btnPrimary ? ' btn-primary' : ''}" href="${link}" target="_blank" rel="noopener">${downloadSvg(btnPrimary ? '#fff' : '#444441')} ${btnLabel || 'Install'}</a>`
+          }
+        </div>`;
+    }
+
+    function render() {
+      const browser = detect();
+      const label = document.getElementById('browser-label');
+      const cards = document.getElementById('cards');
+      const note  = document.getElementById('note');
+
+      const names = { firefox:'Firefox', brave:'Brave', edge:'Edge', opera:'Opera', chrome:'Chrome', safari:'Safari', other:'Unknown browser' };
+      label.textContent = 'Detected: ' + names[browser];
+
+      let html = '';
+      let noteHTML = '';
+
+      if (browser === 'chrome') {
+        html += card({
+          primary: true,
+          iconHtml: shieldSvg('#0F6E56', false),
+          iconBg: 'green',
+          title: 'uBlock Origin',
+          badge: 'Full version',
+          badgeClass: 'badge-green',
+          desc: 'The full-featured blocker. Note: may be delisted from the Chrome Web Store due to MV3 changes.',
+          link: LINKS.ubo,
+          btnLabel: 'Install uBO',
+          btnPrimary: true,
+        });
+        html += card({
+          primary: false,
+          iconHtml: shieldSvg('#854F0B', true),
+          iconBg: 'amber',
+          title: 'uBlock Origin Lite',
+          badge: 'MV3 · Limited',
+          badgeClass: 'badge-amber',
+          desc: 'Built for Chrome's Manifest V3. Fewer filter rules, no scriptlet injection by default.',
+          link: LINKS.ubol,
+          btnLabel: 'Install Lite',
+          btnPrimary: false,
+        });
+        noteHTML = `⚠ Chrome's Manifest V3 update removed APIs that the full uBlock Origin relies on. For the best blocking experience, switch to <a href="${LINKS.firefox_dl}" target="_blank" rel="noopener">Firefox</a> or <a href="https://brave.com/" target="_blank" rel="noopener">Brave</a>.`;
+      }
+
+      else if (browser === 'firefox') {
+        html += card({
+          primary: true,
+          iconHtml: shieldSvg('#0F6E56', false),
+          iconBg: 'green',
+          title: 'uBlock Origin for Firefox',
+          badge: 'Recommended',
+          badgeClass: 'badge-green',
+          desc: 'Full support — Firefox is the recommended browser for uBlock Origin.',
+          link: LINKS.firefox,
+          btnLabel: 'Add to Firefox',
+          btnPrimary: true,
+        });
+      }
+
+      else if (browser === 'brave') {
+        html += card({
+          primary: true,
+          iconHtml: shieldSvg('#0F6E56', false),
+          iconBg: 'green',
+          title: 'uBlock Origin for Brave',
+          badge: 'Full support',
+          badgeClass: 'badge-green',
+          desc: 'Brave supports the full uBlock Origin with MV2 compatibility workarounds built in.',
+          link: LINKS.brave,
+          btnLabel: 'Add to Brave',
+          btnPrimary: true,
+        });
+      }
+
+      else if (browser === 'edge') {
+        html += card({
+          primary: true,
+          iconHtml: shieldSvg('#0F6E56', false),
+          iconBg: 'green',
+          title: 'uBlock Origin for Edge',
+          badge: 'Full support',
+          badgeClass: 'badge-green',
+          desc: 'Currently available on the Edge Add-ons store with full functionality.',
+          link: LINKS.edge,
+          btnLabel: 'Add to Edge',
+          btnPrimary: true,
+        });
+        noteHTML = `⚠ Edge may follow Chrome's Manifest V3 deprecation in the future. For guaranteed long-term support, consider switching to <a href="${LINKS.firefox_dl}" target="_blank" rel="noopener">Firefox</a>.`;
+      }
+
+      else if (browser === 'opera') {
+        html += card({
+          primary: true,
+          iconHtml: shieldSvg('#0F6E56', false),
+          iconBg: 'green',
+          title: 'uBlock Origin for Opera',
+          badge: 'Supported',
+          badgeClass: 'badge-green',
+          desc: 'Available on the Opera add-ons store.',
+          link: LINKS.opera,
+          btnLabel: 'Add to Opera',
+          btnPrimary: true,
+        });
+      }
+
+      else if (browser === 'safari') {
+        html += card({
+          primary: false,
+          iconHtml: shieldSvg('#888780', false),
+          iconBg: 'gray',
+          title: 'Safari — not supported',
+          badge: '',
+          badgeClass: '',
+          desc: 'uBlock Origin dropped Safari support after version 13.',
+          link: LINKS.firefox_dl,
+          btnLabel: 'Get Firefox',
+          btnPrimary: false,
+          disabled: true,
+        });
+        html += card({
+          primary: false,
+          iconHtml: shieldSvg('#0F6E56', false),
+          iconBg: 'green',
+          title: 'Try Firefox instead',
+          badge: 'Recommended',
+          badgeClass: 'badge-green',
+          desc: 'Full uBlock Origin support on macOS. Free download.',
+          link: LINKS.firefox_dl,
+          btnLabel: 'Get Firefox',
+          btnPrimary: true,
+        });
+        noteHTML = `uBlock Origin is unavailable for Safari. Firefox is recommended for ad blocking on macOS and iOS.`;
+      }
+
+      else {
+        html += card({ primary: true, iconHtml: shieldSvg('#0F6E56', false), iconBg: 'green', title: 'Firefox', badge: 'Recommended', badgeClass: 'badge-green', desc: 'Best full uBlock Origin support — recommended by the uBO team.', link: LINKS.firefox, btnLabel: 'Firefox add-on', btnPrimary: true });
+        html += card({ primary: false, iconHtml: shieldSvg('#888780', false), iconBg: 'gray', title: 'Edge', badge: '', badgeClass: '', desc: 'Full support on Edge Add-ons store.', link: LINKS.edge, btnLabel: 'Edge add-on', btnPrimary: false });
+        html += card({ primary: false, iconHtml: shieldSvg('#854F0B', true), iconBg: 'amber', title: 'Chrome — Lite only', badge: 'Limited', badgeClass: 'badge-amber', desc: 'Only uBlock Origin Lite is available for Chrome (Manifest V3).', link: LINKS.ubol, btnLabel: 'Chrome add-on', btnPrimary: false });
+      }
+
+      cards.innerHTML = html;
+
+      if (noteHTML) {
+        note.style.display = 'block';
+        note.innerHTML = noteHTML;
+      }
+    }
+
+    render();
+  })();
+</script>
+
+</body>
+</html>
