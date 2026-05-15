@@ -395,13 +395,12 @@
         iconHtml: halfPauseSvg('#888780'),
         iconBg: 'gray',
         title: 'AutoplayStopper (original)',
-        badge: 'Broken on Chrome',
-        badgeClass: 'badge-red',
-        desc: 'MV2-based original. No longer works on Chrome 104+ due to Manifest V2 deprecation.',
+        badge: 'MV2 · Limited',
+        badgeClass: 'badge-amber',
+        desc: 'Original MV2 version. Broken on Chrome 104+ — but still listed if you want to try it on another browser.',
         link: LINKS.mv2,
-        btnLabel: 'View anyway',
+        btnLabel: 'View',
         btnPrimary: false,
-        disabled: true,
       });
       noteHTML = `⚠ The original AutoplayStopper is broken on modern Chrome. Install the <strong>MV3 version</strong> above — it's a full rewrite with active maintenance and per-site controls.`;
     }
@@ -429,12 +428,24 @@
         title: 'AutoplayStopper MV3',
         badge: 'Recommended',
         badgeClass: 'badge-blue',
-        desc: 'Works fully on Brave. Brave also has built-in autoplay blocking under <em>Settings → Shields</em>.',
-        link: LINKS.brave,
-        btnLabel: 'Add to Brave',
+        desc: 'Actively maintained MV3 rewrite. Per-site Default/Allow/Block control.',
+        link: LINKS.mv3,
+        btnLabel: 'Install MV3',
         btnPrimary: true,
       });
-      noteHTML = `Tip: Brave has built-in autoplay blocking. Go to <strong>Settings → Shields → Block auto-play</strong> for a no-extension option.`;
+      html += card({
+        primary: false,
+        iconHtml: pauseSvg('#854F0B'),
+        iconBg: 'amber',
+        title: 'AutoplayStopper (original)',
+        badge: 'MV2 · Brave only',
+        badgeClass: 'badge-amber',
+        desc: 'Original MV2 version. Brave still supports MV2 extensions, so this works on Brave.',
+        link: LINKS.mv2,
+        btnLabel: 'Install original',
+        btnPrimary: false,
+      });
+      noteHTML = `Tip: Brave has built-in autoplay blocking too. Go to <strong>Settings → Shields → Block auto-play</strong> for a no-extension option.`;
     }
 
     else if (browser === 'edge') {
