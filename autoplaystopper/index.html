@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AutoplayStopper</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue-50: #EFF6FF;
+      --blue-100: #DBEAFE;
+      --blue-400: #3B82F6;
+      --blue-600: #2563EB;
+      --blue-800: #1E40AF;
+      --amber-50: #FAEEDA;
+      --amber-600: #854F0B;
+      --amber-800: #633806;
+      --gray-50: #F5F5F3;
+      --gray-100: #EBEBEA;
+      --gray-300: #C4C4C1;
+      --gray-500: #888780;
+      --gray-700: #444441;
+      --gray-900: #1A1A18;
+      --green-400: #1D9E75;
+      --red-50: #FDE8E8;
+      --red-400: #E02424;
+      --red-600: #C81E1E;
+      --red-800: #9B1C1C;
+      --text: #1A1A18;
+      --text-muted: #666664;
+      --text-subtle: #999997;
+      --bg: #FAFAF8;
+      --surface: #FFFFFF;
+      --border: rgba(0,0,0,0.08);
+      --border-strong: rgba(0,0,0,0.14);
+      --radius: 10px;
+      --radius-lg: 14px;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    .section {
+      width: 100%;
+      max-width: 560px;
+    }
+
+    /* Logo */
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 2.5rem;
+    }
+    .logo-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .logo-icon img {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .logo-name {
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--text);
+    }
+
+    /* Headline */
+    .headline {
+      font-size: 32px;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 0.6rem;
+    }
+    .subline {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-bottom: 1.75rem;
+      line-height: 1.5;
+    }
+
+    /* AI badge */
+    .ai-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 1.5rem;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      color: #854F0B;
+      background: #FAEEDA;
+      border: 1px solid #F3D39A;
+      border-radius: 999px;
+    }
+
+    /* Detected badge */
+    .detected-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-family: 'DM Mono', monospace;
+      color: var(--text-subtle);
+      background: var(--gray-100);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 4px 10px;
+      margin-bottom: 1.5rem;
+    }
+    .detected-badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green-400);
+      flex-shrink: 0;
+    }
+
+    /* Cards */
+    .cards { display: flex; flex-direction: column; gap: 10px; }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .card:hover { border-color: var(--border-strong); box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+    .card.primary {
+      border-color: var(--blue-400);
+      background: linear-gradient(135deg, #FAFFFE 0%, #EFF6FF 100%);
+    }
+    .card.primary:hover { border-color: var(--blue-600); box-shadow: 0 2px 16px rgba(37,99,235,0.12); }
+    .card.disabled { opacity: 0.6; }
+
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .card-icon.blue  { background: var(--blue-50); }
+    .card-icon.gray  { background: var(--gray-50); }
+    .card-icon.amber { background: var(--amber-50); }
+    .card-icon.red   { background: var(--red-50); }
+
+    .card-body { flex: 1; min-width: 0; }
+    .card-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 2px;
+    }
+    .card-desc {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    .badge {
+      font-size: 10.5px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 5px;
+      letter-spacing: 0.01em;
+    }
+    .badge-blue  { background: var(--blue-50);  color: var(--blue-600); }
+    .badge-amber { background: var(--amber-50); color: var(--amber-600); }
+    .badge-red   { background: var(--red-50);   color: var(--red-600); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 9px 16px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border-strong);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: background 0.13s, border-color 0.13s, transform 0.1s;
+    }
+    .btn:hover { background: var(--gray-50); }
+    .btn:active { transform: scale(0.97); }
+    .btn.btn-primary {
+      background: var(--blue-600);
+      color: #fff;
+      border-color: var(--blue-600);
+    }
+    .btn.btn-primary:hover { background: var(--blue-800); border-color: var(--blue-800); }
+
+    /* Note */
+    .note {
+      margin-top: 1.25rem;
+      padding: 0.9rem 1.1rem;
+      background: #FFFBF0;
+      border: 1px solid #FAC775;
+      border-radius: var(--radius);
+      font-size: 12.5px;
+      color: var(--amber-800);
+      line-height: 1.55;
+      display: none;
+    }
+    .note a { color: var(--blue-600); font-weight: 600; text-decoration: none; }
+    .note a:hover { text-decoration: underline; }
+
+    /* Divider */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 1.75rem 0;
+    }
+
+    /* Footer */
+    .footer {
+      font-size: 12px;
+      color: var(--text-subtle);
+      line-height: 1.5;
+    }
+    .footer a { color: var(--text-muted); text-decoration: none; }
+    .footer a:hover { color: var(--text); }
+
+    @media (max-width: 480px) {
+      .headline { font-size: 26px; }
+      .card { flex-wrap: wrap; }
+      .btn { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<main class="section">
+
+  <div class="logo">
+    <div class="logo-icon">
+      <img src="https://lh3.googleusercontent.com/k5FN8ocxSUansAc0XLuj3jLwGEupxXtcSdwDAGlnHiqACO78M_50uNAhMisOVpF31Y4peHKan350F2BfUHpyH3OoNKI=s60" alt="AutoplayStopper icon" />
+    </div>
+    <span class="logo-name">AutoplayStopper</span>
+  </div>
+
+  <h1 class="headline">Stop autoplay videos,<br>free and open-source.</h1>
+  <p class="subline">Blocks video and audio from autoplaying across all websites, with per-site permission control.</p>
+
+  <div class="ai-badge">
+    MOST PARTS OF THIS PAGE IS AI GENERATED
+  </div>
+
+  <div class="detected-badge">
+    <span class="dot"></span>
+    <span id="browser-label">Detecting browser…</span>
+  </div>
+
+  <div class="cards" id="cards"></div>
+  <div class="note" id="note"></div>
+
+  <hr class="divider" />
+
+  <p class="footer">
+    AutoplayStopper is free and open-source. &middot;
+    <a href="https://github.com/kenijo/AutoplayStopperMV3" target="_blank" rel="noopener">MV3 source on GitHub</a>
+    &middot;
+    <a href="https://github.com/kenijo/AutoplayStopperMV2" target="_blank" rel="noopener">Legacy MV2 source</a>
+  </p>
+
+</main>
+
+<script>
+(function () {
+  const LINKS = {
+    mv3:     'https://chromewebstore.google.com/detail/autoplaystopper-mv3/gcendpekmacfohmhhkbhejjfbepkkkib',
+    mv2:     'https://chromewebstore.google.com/detail/autoplaystopper/ejddcgojdblidajhngkogefpkknnebdh',
+    firefox_dl: 'https://www.mozilla.org/firefox/',
+    brave:   'https://chromewebstore.google.com/detail/autoplaystopper-mv3/gcendpekmacfohmhhkbhejjfbepkkkib',
+    edge:    'https://chromewebstore.google.com/detail/autoplaystopper-mv3/gcendpekmacfohmhhkbhejjfbepkkkib',
+    opera:   'https://chromewebstore.google.com/detail/autoplaystopper-mv3/gcendpekmacfohmhhkbhejjfbepkkkib',
+  };
+
+  function detect() {
+    const ua = navigator.userAgent;
+    const vendor = navigator.vendor || '';
+    if (/Edg\//.test(ua))          return 'edge';
+    if (/OPR\/|Opera\//.test(ua))  return 'opera';
+    if (/Firefox\//.test(ua))      return 'firefox';
+    if (/Brave/.test(ua))          return 'brave';
+    if (/Chrome\//.test(ua) && /Google Inc/.test(vendor)) return 'chrome';
+    if (/Safari\//.test(ua) && /Apple/.test(vendor))      return 'safari';
+    return 'other';
+  }
+
+  function pauseSvg(color) {
+    return `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="4" y="4" width="4" height="12" rx="1.5" fill="${color}"/>
+      <rect x="12" y="4" width="4" height="12" rx="1.5" fill="${color}"/>
+    </svg>`;
+  }
+
+  function halfPauseSvg(color) {
+    return `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="4" y="4" width="4" height="12" rx="1.5" fill="${color}"/>
+      <rect x="12" y="4" width="4" height="12" rx="1.5" fill="${color}" opacity="0.4"/>
+    </svg>`;
+  }
+
+  function downloadSvg(color) {
+    return `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M8 2V10" stroke="${color}" stroke-width="1.6" stroke-linecap="round"/>
+      <path d="M5 7L8 10L11 7" stroke="${color}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M2 13H14" stroke="${color}" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>`;
+  }
+
+  function card({ primary, iconHtml, iconBg, title, badge, badgeClass, desc, link, btnLabel, btnPrimary, disabled }) {
+    return `
+      <div class="card${primary ? ' primary' : ''}${disabled ? ' disabled' : ''}">
+        <div class="card-icon ${iconBg}">${iconHtml}</div>
+        <div class="card-body">
+          <div class="card-title">
+            ${title}
+            ${badge ? `<span class="badge ${badgeClass}">${badge}</span>` : ''}
+          </div>
+          <div class="card-desc">${desc}</div>
+        </div>
+        ${disabled
+          ? `<span style="font-size:12px;color:var(--text-subtle);white-space:nowrap;">Unavailable</span>`
+          : `<a class="btn${btnPrimary ? ' btn-primary' : ''}" href="${link}" target="_blank" rel="noopener">${downloadSvg(btnPrimary ? '#fff' : '#444441')} ${btnLabel || 'Install'}</a>`
+        }
+      </div>`;
+  }
+
+  function render() {
+    const browser = detect();
+    const label = document.getElementById('browser-label');
+    const cards = document.getElementById('cards');
+    const note  = document.getElementById('note');
+
+    const names = { firefox:'Firefox', brave:'Brave', edge:'Edge', opera:'Opera', chrome:'Chrome', safari:'Safari', other:'Unknown browser' };
+    label.textContent = 'Detected: ' + names[browser];
+
+    let html = '';
+    let noteHTML = '';
+
+    if (browser === 'chrome') {
+      html += card({
+        primary: true,
+        iconHtml: pauseSvg('#2563EB'),
+        iconBg: 'blue',
+        title: 'AutoplayStopper MV3',
+        badge: 'Recommended',
+        badgeClass: 'badge-blue',
+        desc: 'Actively maintained MV3 rewrite. Per-site Default/Allow/Block control, works on Chrome 104+.',
+        link: LINKS.mv3,
+        btnLabel: 'Install MV3',
+        btnPrimary: true,
+      });
+      html += card({
+        primary: false,
+        iconHtml: halfPauseSvg('#888780'),
+        iconBg: 'gray',
+        title: 'AutoplayStopper (original)',
+        badge: 'Broken on Chrome',
+        badgeClass: 'badge-red',
+        desc: 'MV2-based original. No longer works on Chrome 104+ due to Manifest V2 deprecation.',
+        link: LINKS.mv2,
+        btnLabel: 'View anyway',
+        btnPrimary: false,
+        disabled: true,
+      });
+      noteHTML = `⚠ The original AutoplayStopper is broken on modern Chrome. Install the <strong>MV3 version</strong> above — it's a full rewrite with active maintenance and per-site controls.`;
+    }
+
+    else if (browser === 'firefox') {
+      html += card({
+        primary: false,
+        iconHtml: halfPauseSvg('#888780'),
+        iconBg: 'gray',
+        title: 'Firefox — not supported',
+        badge: 'Unavailable',
+        badgeClass: 'badge-red',
+        desc: 'AutoplayStopper is not available for Firefox. Switch to a Chromium-based browser to use it.',
+        link: '',
+        disabled: true,
+      });
+      noteHTML = `AutoplayStopper is not available for Firefox. It works on Chrome, Brave, Edge, Opera, and other Chromium-based browsers.`;
+    }
+
+    else if (browser === 'brave') {
+      html += card({
+        primary: true,
+        iconHtml: pauseSvg('#2563EB'),
+        iconBg: 'blue',
+        title: 'AutoplayStopper MV3',
+        badge: 'Recommended',
+        badgeClass: 'badge-blue',
+        desc: 'Works fully on Brave. Brave also has built-in autoplay blocking under <em>Settings → Shields</em>.',
+        link: LINKS.brave,
+        btnLabel: 'Add to Brave',
+        btnPrimary: true,
+      });
+      noteHTML = `Tip: Brave has built-in autoplay blocking. Go to <strong>Settings → Shields → Block auto-play</strong> for a no-extension option.`;
+    }
+
+    else if (browser === 'edge') {
+      html += card({
+        primary: true,
+        iconHtml: pauseSvg('#2563EB'),
+        iconBg: 'blue',
+        title: 'AutoplayStopper MV3',
+        badge: 'Recommended',
+        badgeClass: 'badge-blue',
+        desc: 'Install the MV3 version from the Chrome Web Store — works on Edge via Chromium compatibility.',
+        link: LINKS.edge,
+        btnLabel: 'Add to Edge',
+        btnPrimary: true,
+      });
+    }
+
+    else if (browser === 'opera') {
+      html += card({
+        primary: true,
+        iconHtml: pauseSvg('#2563EB'),
+        iconBg: 'blue',
+        title: 'AutoplayStopper MV3',
+        badge: 'Supported',
+        badgeClass: 'badge-blue',
+        desc: 'Install via Chrome Web Store — compatible with Opera through Chromium extension support.',
+        link: LINKS.opera,
+        btnLabel: 'Add to Opera',
+        btnPrimary: true,
+      });
+    }
+
+    else if (browser === 'safari') {
+      html += card({
+        primary: false,
+        iconHtml: halfPauseSvg('#888780'),
+        iconBg: 'gray',
+        title: 'Safari — not supported',
+        badge: '',
+        badgeClass: '',
+        desc: 'AutoplayStopper is not available for Safari.',
+        link: '',
+        disabled: true,
+      });
+      noteHTML = `AutoplayStopper is unavailable for Safari. It works on Chrome, Brave, Edge, Opera, and other Chromium-based browsers.`;
+    }
+
+    else {
+      html += card({ primary: true,  iconHtml: pauseSvg('#2563EB'),    iconBg: 'blue', title: 'Chrome / Edge / Brave / Opera', badge: 'MV3',    badgeClass: 'badge-blue', desc: 'Install the MV3 version — works on all Chromium-based browsers.',  link: LINKS.mv3, btnLabel: 'Install MV3', btnPrimary: true });
+      html += card({ primary: false, iconHtml: halfPauseSvg('#888780'), iconBg: 'gray', title: 'Original (MV2)',                 badge: 'Broken', badgeClass: 'badge-red',  desc: 'No longer works on modern Chrome due to MV2 deprecation.',          link: LINKS.mv2, btnLabel: 'View',        btnPrimary: false, disabled: true });
+    }
+
+    cards.innerHTML = html;
+
+    if (noteHTML) {
+      note.style.display = 'block';
+      note.innerHTML = noteHTML;
+    }
+  }
+
+  render();
+})();
+</script>
+
+</body>
+</html>
