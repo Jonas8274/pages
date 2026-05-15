@@ -1,1 +1,1 @@
-To give feedback make a discussion or a issue
+To give feedback make a issue
