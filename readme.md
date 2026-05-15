@@ -1,1 +1,1 @@
-The site is still in beta plz be patient while we work on it
+To give feedback make a discussion or a issue
