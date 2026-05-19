@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cromite — Take Back Your Browser</title>
+<meta name="description" content="Cromite: a Chromium fork with built-in ad blocking and privacy enhancements for Android.">
+<style>
+  :root {
+    --bg: #0b0d0f;
+    --surface: #13161a;
+    --border: #1e2329;
+    --accent: #4fc3f7;
+    --accent2: #00e5a0;
+    --text: #e2e8f0;
+    --muted: #6b7685;
+    --mono: 'Courier New', monospace;
+  }
+
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+  html{scroll-behavior:smooth}
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:Georgia,'Times New Roman',serif;
+    font-size:17px;
+    line-height:1.7;
+    min-height:100vh;
+  }
+
+  /* grid noise texture via SVG */
+  body::before{
+    content:'';
+    position:fixed;
+    inset:0;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Crect width='60' height='60' fill='none'/%3E%3Cpath d='M0 0h60v60H0z' fill='none' stroke='%23ffffff04' stroke-width='.5'/%3E%3Cline x1='0' y1='30' x2='60' y2='30' stroke='%23ffffff03' stroke-width='.5'/%3E%3Cline x1='30' y1='0' x2='30' y2='60' stroke='%23ffffff03' stroke-width='.5'/%3E%3C/svg%3E");
+    pointer-events:none;
+    z-index:0;
+  }
+
+  .wrap{
+    position:relative;
+    z-index:1;
+    max-width:780px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+
+  /* ── HEADER ── */
+  header{
+    padding:64px 0 48px;
+    border-bottom:1px solid var(--border);
+  }
+
+  .tag{
+    display:inline-block;
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--accent2);
+    background:rgba(0,229,160,.08);
+    border:1px solid rgba(0,229,160,.2);
+    padding:3px 10px;
+    border-radius:3px;
+    margin-bottom:24px;
+  }
+
+  h1{
+    font-size:clamp(2.2rem,6vw,3.6rem);
+    font-weight:700;
+    letter-spacing:-.02em;
+    line-height:1.1;
+    color:#fff;
+  }
+
+  h1 span{
+    color:var(--accent);
+    font-style:italic;
+  }
+
+  .subtitle{
+    margin-top:16px;
+    font-size:1.1rem;
+    color:var(--muted);
+    max-width:520px;
+  }
+
+  .badge-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:28px;
+  }
+
+  .badge{
+    font-family:var(--mono);
+    font-size:12px;
+    padding:4px 12px;
+    border-radius:3px;
+    border:1px solid var(--border);
+    color:var(--muted);
+    background:var(--surface);
+  }
+
+  /* ── INSTALL SECTION ── */
+  section{padding:48px 0}
+  section + section{border-top:1px solid var(--border)}
+
+  h2{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.15em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:20px;
+  }
+
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:6px;
+    padding:24px;
+    margin-bottom:16px;
+  }
+
+  .card-title{
+    font-size:1.05rem;
+    font-weight:700;
+    color:#fff;
+    margin-bottom:8px;
+  }
+
+  .card p{
+    color:var(--muted);
+    font-size:.95rem;
+    margin-bottom:14px;
+  }
+
+  .btn{
+    display:inline-block;
+    padding:9px 20px;
+    border-radius:4px;
+    font-family:var(--mono);
+    font-size:13px;
+    font-weight:700;
+    text-decoration:none;
+    transition:opacity .15s;
+    cursor:pointer;
+    border:none;
+  }
+  .btn:hover{opacity:.8}
+  .btn-primary{background:var(--accent);color:#000}
+  .btn-ghost{
+    background:transparent;
+    border:1px solid var(--border);
+    color:var(--text);
+  }
+
+  /* code block */
+  .code-block{
+    background:#090b0d;
+    border:1px solid var(--border);
+    border-radius:4px;
+    padding:16px 20px;
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--accent2);
+    overflow-x:auto;
+    white-space:nowrap;
+    position:relative;
+  }
+
+  .code-block .comment{color:var(--muted)}
+
+  /* feature list */
+  .features{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+    gap:14px;
+  }
+
+  .feat{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:6px;
+    padding:18px;
+  }
+
+  .feat-icon{
+    font-size:1.4rem;
+    margin-bottom:8px;
+    display:block;
+  }
+
+  .feat-title{
+    font-size:.95rem;
+    font-weight:700;
+    color:#fff;
+    margin-bottom:4px;
+  }
+
+  .feat p{
+    font-size:.85rem;
+    color:var(--muted);
+    line-height:1.5;
+  }
+
+  /* steps */
+  .steps{counter-reset:step}
+  .step{
+    display:flex;
+    gap:16px;
+    margin-bottom:20px;
+    align-items:flex-start;
+  }
+  .step-num{
+    flex-shrink:0;
+    width:32px;
+    height:32px;
+    border-radius:50%;
+    background:rgba(79,195,247,.12);
+    border:1px solid rgba(79,195,247,.3);
+    color:var(--accent);
+    font-family:var(--mono);
+    font-size:13px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    counter-increment:step;
+    margin-top:2px;
+  }
+  .step-body{flex:1}
+  .step-body strong{color:#fff;display:block;margin-bottom:4px}
+  .step-body p,.step-body a{font-size:.9rem;color:var(--muted)}
+  .step-body a{color:var(--accent);text-underline-offset:3px}
+
+  /* ── FOOTER ── */
+  footer{
+    border-top:1px solid var(--border);
+    padding:32px 0 48px;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--muted);
+  }
+
+  footer a{color:var(--muted);text-decoration:none}
+  footer a:hover{color:var(--accent)}
+
+  @media(max-width:500px){
+    header{padding:40px 0 32px}
+    h1{font-size:2.1rem}
+    .features{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <header>
+    <div class="tag">Privacy · Android · Open Source</div>
+    <h1>Cro<span>mite</span></h1>
+    <p class="subtitle">A Chromium fork with built-in ad blocking and privacy enhancements. Take back your browser.</p>
+    <div class="badge-row">
+      <span class="badge">Made by AI slop sry idk how to code 😭😭😭😭😭</span>
+    </div>
+  </header>
+
+  <!-- INSTALL -->
+  <section>
+    <h2>Install on Android</h2>
+
+    <div class="card">
+      <div class="card-title">Option A — Download APK directly</div>
+      <p>Grab the latest release APK from the official GitHub releases page. Enable "Install unknown apps" in Android settings, then open the APK.</p>
+      <a class="btn btn-primary" href="https://github.com/uazo/cromite/releases/latest" target="_blank" rel="noopener">Download Latest APK →</a>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Option B — F-Droid (auto update)</div>
+      <p>Add the Cromite F-Droid repository to get automatic updates through F-Droid.</p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <strong>Install F-Droid</strong>
+            <p>Download from <a href="https://f-droid.org" target="_blank" rel="noopener">f-droid.org</a> if you don't have it already.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <strong>Add the Cromite repository</strong>
+            <p>In F-Droid → Settings → Repositories → Add repository, enter the URL below:</p>
+          </div>
+        </div>
+      </div>
+      <div class="code-block"><span class="comment"># Cromite F-Droid repo URL</span>
+https://www.cromite.org/fdroid/repo/?fingerprint=49F37E74DEE483DCA2B991334FB5A0200787430D0221D59ED3C1D3CAC2A47264</div>
+      <br>
+      <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <strong>install</strong>
+            <p>F-Droid will keep Cromite updated automatically going forward.</p>
+          </div>
+        </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Option C — Obtainium also auto updattes</div>
+      <p>Track releases automatically from GitHub with <a href="https://github.com/ImranR98/Obtainium" target="_blank" rel="noopener" style="color:var(--accent)">Obtainium</a>. Add this source URL:</p>
+      <div class="code-block">https://github.com/uazo/cromite</div>
+    </div>
+  </section>
+
+  <!-- DESKTOP -->
+  <section>
+    <h2>Desktop / Other Platforms</h2>
+    <div class="card">
+      <div class="card-title">Linux &amp; Windows Builds</div>
+      <p>Desktop builds are available for select platforms in the GitHub releases. Check the assets list for <code style="font-family:var(--mono);font-size:.85em;color:var(--accent2)">cromite-*.tar.gz</code> or Windows zip files.</p>
+      <a class="btn btn-ghost" href="https://github.com/uazo/cromite/releases" target="_blank" rel="noopener">All Releases</a>
+    </div>
+  </section>
+
+  <!-- LINKS -->
+  <section>
+    <h2>Resources</h2>
+    <div class="card">
+      <div class="card-title">Source &amp; Community</div>
+      <p>Report issues, read the docs, or contribute patches.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:4px">
+        <a class="btn btn-ghost" href="https://github.com/uazo/cromite" target="_blank" rel="noopener">GitHub →</a>
+        <a class="btn btn-ghost" href="https://github.com/uazo/cromite/discussions" target="_blank" rel="noopener">Discussions →</a>
+        <a class="btn btn-ghost" href="https://github.com/uazo/cromite/issues" target="_blank" rel="noopener">Issues →</a>
+      </div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>
