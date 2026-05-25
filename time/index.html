@@ -1,88 +1,77 @@
-<script>
-  const timeEl = document.getElementById('time');
-  const dateEl = document.getElementById('date');
-  const tzEl = document.getElementById('tz');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Clock – Jonas</title>
+  <link rel="icon" href="/clock.jpg">
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background: #111;
+      color: white;
+    }
+    a {
+      color: #aef;
+      font-size: 1.2rem;
+    }
+    .clock-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    #time {
+      font-size: 5rem;
+      font-weight: bold;
+      letter-spacing: 0.05em;
+      color: white;
+      font-variant-numeric: tabular-nums;
+    }
+    #date {
+      font-size: 1.1rem;
+      color: #aaa;
+    }
+    #tz {
+      font-size: 0.85rem;
+      color: #555;
+    }
+    .back {
+      margin-top: 32px;
+    }
+  </style>
+</head>
+<body>
+  <div class="clock-box">
+    <div id="time">00:00:00</div>
+    <div id="date"></div>
+    <div id="tz"></div>
+    <div class="back"><a href="/">← Back home</a></div>
+    <button onclick="document.documentElement.requestFullscreen()" style="margin-top:12px;background:none;border:1px solid #333;color:#aaa;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:0.85rem;">⛶ Fullscreen</button>
+  </div>
+  <script>
+    const days   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
-  let baseServer = 0;
-  let basePerf = 0;
-
-  const timeFormatter = new Intl.DateTimeFormat(undefined, {
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit'
-  });
-
-  const dateFormatter = new Intl.DateTimeFormat(undefined, {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
-
-  try {
-    tzEl.textContent =
-      Intl.DateTimeFormat().resolvedOptions().timeZone;
-  } catch (e) {}
-
-  async function syncTime() {
     try {
-      const start = performance.now();
+      document.getElementById('tz').textContent = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    } catch(e) {}
 
-      const res = await fetch(
-        'https://worldtimeapi.org/api/ip'
-      );
-
-      const end = performance.now();
-
-      const data = await res.json();
-
-      // latency compensation
-      const latency = (end - start) / 2;
-
-      // convert seconds → milliseconds
-      baseServer =
-        (data.unixtime * 1000) + latency;
-
-      basePerf = performance.now();
-
-      console.log('Synced');
-    } catch (err) {
-      console.error('Time sync failed', err);
+    function update() {
+      const now = new Date();
+      document.title = now.toLocaleTimeString();
+      document.getElementById('time').textContent = now.toLocaleTimeString();
+      document.getElementById('date').textContent =
+        days[now.getDay()] + ', ' + months[now.getMonth()] + ' ' + now.getDate() + ' ' + now.getFullYear();
     }
-  }
-
-  function accurateNow() {
-    return new Date(
-      baseServer +
-      (performance.now() - basePerf)
-    );
-  }
-
-  function update() {
-    const now = accurateNow();
-
-    document.title = timeFormatter.format(now);
-
-    timeEl.textContent =
-      timeFormatter.format(now);
-
-    dateEl.textContent =
-      dateFormatter.format(now);
-
-    requestAnimationFrame(update);
-  }
-
-  syncTime().then(() => {
     update();
-
-    // resync every minute
-    setInterval(syncTime, 60000);
-  });
-
-  // resync when returning to tab
-  document.addEventListener('visibilitychange', () => {
-    if (!document.hidden) {
-      syncTime();
-    }
-  });
-</script>
+    setInterval(update, 1000);
+  </script>
+</body>
+</html>
