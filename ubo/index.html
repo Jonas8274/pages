@@ -302,6 +302,7 @@
       ubo:      'https://chromewebstore.google.com/detail/ublock-origin/cjpalhdlnbpafiamejdnhcphjbkeiagm',
       ubol:     'https://chromewebstore.google.com/detail/ublock-origin-lite/ddkjiahejlhfcafbddmgiahcphecmpfh',
       firefox_dl: 'https://www.mozilla.org/firefox/',
+      uboMv3:   'https://github.com/uBlockOrigin/uBlock-issues/wiki/About-Google-Chrome%27s-%22This-extension-may-soon-no-longer-be-supported%22',
     };
 
     function detect() {
@@ -380,7 +381,7 @@
           title: 'uBlock Origin',
           badge: 'Full version',
           badgeClass: 'badge-red',
-          desc: 'The full-featured blocker. Note: may be delisted from the Chrome Web Store due to MV3 changes check ',
+          desc: `The full-featured blocker. Note: Chrome may flag it as unsupported due to <a href="${LINKS.uboMv3}" target="_blank" rel="noopener">MV3 changes</a>`,
           link: LINKS.ubo,
           btnLabel: 'Install uBO',
           btnPrimary: true,
@@ -394,7 +395,6 @@
           badgeClass: 'badge-amber',
           desc: "Built for Chrome's Manifest V3. So it works slightly worse (they have added lots of uBO's functions into uBOL)",
           link: LINKS.ubol,
-          noteLink: 'https://github.com/uBlockOrigin/uBlock-issues/wiki/About-Google-Chrome%27s-%22This-extension-may-soon-no-longer-be-supported%22',
           btnLabel: 'Install Lite',
           btnPrimary: false,
         });
