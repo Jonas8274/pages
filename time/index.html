@@ -104,10 +104,20 @@
 function showInfo(text) {
   const info = document.getElementById('info');
 
-  info.innerHTML = `
-    <span>${text}</span>
-    <button type="button" id="info-close" aria-label="Dismiss">×</button>
-  `;
+info.innerHTML = `
+  <span>${text}</span>
+  <button type="button" id="info-close" aria-label="Dismiss">×</button>
+`;
+  const closeButton = document.getElementById('info-close');
+
+closeButton.addEventListener('mousedown', () => {
+  console.log('mouse down');
+});
+
+closeButton.addEventListener('click', () => {
+  console.log('clicked');
+  info.hidden = true;
+});
 
   info.hidden = false;
 
