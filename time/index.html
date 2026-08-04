@@ -104,9 +104,11 @@
 
         offset = candidateOffset;
         setTzLabel('synced');
+        console.log('[clock] synced OK. server said:', data, 'computed offset (ms):', candidateOffset);
       } catch (e) {
         offset = 0;
         setTzLabel('local clock');
+        console.warn('[clock] sync failed, falling back to local clock:', e);
       }
     }
 
