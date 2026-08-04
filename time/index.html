@@ -108,6 +108,9 @@ info.innerHTML = `
   <span>${text}</span>
   <button type="button" id="info-close" aria-label="Dismiss">×</button>
 `;
+
+  info.hidden = false;
+
   const closeButton = document.getElementById('info-close');
 
 closeButton.addEventListener('mousedown', () => {
@@ -118,14 +121,6 @@ closeButton.addEventListener('click', () => {
   console.log('clicked');
   info.hidden = true;
 });
-
-  info.hidden = false;
-
-  const closeButton = document.getElementById('info-close');
-
-  closeButton.onclick = () => {
-    info.hidden = true;
-  };
 
   console.log("handler attached:", closeButton.onclick);
 }
