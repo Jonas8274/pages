@@ -53,8 +53,9 @@
   padding: 0;
   pointer-events: auto;
   position: relative;
-  z-index: 10;
+  z-index: 999;
 }
+
 #info button:hover {
   color: #fff;
 }
@@ -105,14 +106,14 @@ function showInfo(text) {
 
   info.innerHTML = `
     <span>${text}</span>
-    <button type="button" id="info-close" aria-label="Dismiss">×</button>
+    <button type="button" id="info-close">×</button>
   `;
 
   info.hidden = false;
 
-  document.querySelector('#info-close').onclick = function () {
+  document.getElementById('info-close').addEventListener('click', () => {
     info.hidden = true;
-  };
+  });
 }
 
 function hideInfo() {
