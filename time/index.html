@@ -27,13 +27,34 @@
       align-items: center;
       gap: 12px;
     }
-    #info {
-    font-size: 0.85rem;
-    color: #888;
-    max-width: 500px;
-    text-align: center;
-    margin-top: 6px;
-  }
+   #info {
+  margin-top: 8px;
+  max-width: 520px;
+  padding: 10px 12px;
+  background: #1d1d1d;
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: #aaa;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+    #info span {
+  flex: 1;
+}
+#info button {
+  background: none;
+  border: none;
+  color: #777;
+  font-size: 1.1rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+}
+#info button:hover {
+  color: #fff;
+}
     #time {
       font-size: 5rem;
       font-weight: bold;
@@ -59,8 +80,10 @@
     <div id="time">00:00:00</div>
     <div id="date"></div>
     <div id="tz"></div>
-    <div id="info"></div>
-    <div class="back"><a href="/">← Back home</a></div>
+<div id="info" hidden>
+  <span id="info-text"></span>
+  <button id="info-close" aria-label="Dismiss">×</button>
+</div>    <div class="back"><a href="/">← Back home</a></div>
     <button onclick="document.documentElement.requestFullscreen()" style="margin-top:12px;background:none;border:1px solid #333;color:#aaa;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:0.85rem;">⛶ Fullscreen</button>
   </div>
   <script>
@@ -76,12 +99,29 @@
     // Stays 0 (i.e. falls back to the local clock) until a sync succeeds.
     let offset = 0;
 
+function showInfo(text) {
+  const info = document.getElementById('info');
+  info.innerHTML = `
+    <span>${text}</span>
+    <button id="info-close" aria-label="Dismiss">×</button>
+  `;
+  info.hidden = false;
+
+  document.getElementById('info-close').onclick = () => {
+    info.hidden = true;
+  };
+}
+
+function hideInfo() {
+  document.getElementById('info').hidden = true;
+}
+
     function setTzLabel(status) {
       document.getElementById('tz').textContent = tz + (status ? ' · ' + status : '');
     }
     function setStatus(status, info = '') {
   document.getElementById('tz').textContent = `${tz} · ${status}`;
-  document.getElementById('info').textContent = info;
+    document.getElementById('info-close').onclick = () => {
 }
 
     async function syncTime() {
@@ -114,11 +154,16 @@
         offset = candidateOffset;
         setStatus('synced');
         console.log('[clock] synced OK via Cloudflare. computed offset (ms):', candidateOffset);
-      } catch (e) {
-        offset = 0;
-        setStatus(   'local clock',   'Unable to verify the time. This is commonly caused by ad blockers or privacy extensions blocking Cloudflare requests I will try to switch over to a better time indicator (can raspberry pi work in diff timezones?) but for now you will have to either disable ur adblocker (sry but theres no ads anyways) use the localtime or just allow the cloudfare thing in the uBO options. The clock is using your device\'s local time instead.' );
-        console.warn('[clock] sync failed, falling back to local clock:', e);
-      }
+     } catch (e) {
+  offset = 0;
+
+  setStatus(
+    'local clock',
+    'Unable to verify the time. This is commonly caused by ad blockers or privacy extensions blocking the Cloudflare time check. I will try to fix this soon with a raspberry pi so sry. The clock is using your device\'s local time instead.'
+  );
+
+  console.warn('[clock] sync failed, falling back to local clock:', e);
+}
     }
 
     function update() {
