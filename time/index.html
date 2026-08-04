@@ -75,36 +75,33 @@
     async function syncTime() {
       try {
         const t0 = performance.now();
-        const res = await fetch(
-          'https://timeapi.io/api/Time/current/zone?timeZone=' + encodeURIComponent(tz),
-          { cache: 'no-store' }
-        );
+        // Cloudflare's edge stamps this response fresh on every single request
+        // (huge network, effectively impossible to serve a stale/cached copy),
+        // and returns a plain UTC unix timestamp — no timezone-name matching,
+        // no JSON parsing quirks. Format is plain text, one key=value per line,
+        // including a line like "ts=1735999999.123".
+        const res = await fetch('https://www.cloudflare.com/cdn-cgi/trace', { cache: 'no-store' });
         const t1 = performance.now();
         if (!res.ok) throw new Error('bad response');
-        const data = await res.json();
+        const text = await res.text();
+        const match = text.match(/^ts=([\d.]+)/m);
+        if (!match) throw new Error('no ts field in response: ' + text);
 
-        // Build the Date from the individual numeric fields rather than parsing
-        // data.dateTime as a string. timeapi.io's ISO string uses 7 digits of
-        // fractional seconds (a .NET-ism), which browsers parse inconsistently
-        // and was producing an incorrect time. The numeric fields are unambiguous.
-        const serverMs = new Date(
-          data.year, data.month - 1, data.day,
-          data.hour, data.minute, data.seconds, data.milliSeconds
-        ).getTime();
-        if (isNaN(serverMs)) throw new Error('unparseable time');
+        const serverMs = parseFloat(match[1]) * 1000;
+        if (isNaN(serverMs)) throw new Error('unparseable ts');
 
         // account for the round-trip network delay
         const candidateOffset = (serverMs + (t1 - t0) / 2) - Date.now();
 
         // Sanity check: if the "correction" is implausibly large, the response
-        // was probably malformed or for the wrong zone — don't trust it.
+        // was probably malformed — don't trust it.
         if (Math.abs(candidateOffset) > 12 * 60 * 60 * 1000) {
           throw new Error('offset implausible: ' + candidateOffset);
         }
 
         offset = candidateOffset;
         setTzLabel('synced');
-        console.log('[clock] synced OK. server said:', data, 'computed offset (ms):', candidateOffset);
+        console.log('[clock] synced OK via Cloudflare. computed offset (ms):', candidateOffset);
       } catch (e) {
         offset = 0;
         setTzLabel('local clock');
