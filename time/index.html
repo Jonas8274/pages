@@ -119,9 +119,14 @@ function hideInfo() {
     function setTzLabel(status) {
       document.getElementById('tz').textContent = tz + (status ? ' · ' + status : '');
     }
-    function setStatus(status, info = '') {
+function setStatus(status, info = '') {
   document.getElementById('tz').textContent = `${tz} · ${status}`;
-    document.getElementById('info-close').onclick = () => {
+
+  if (info) {
+    showInfo(info);
+  } else {
+    hideInfo();
+  }
 }
 
     async function syncTime() {
