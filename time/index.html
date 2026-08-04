@@ -110,10 +110,9 @@ function showInfo(text) {
 
   info.hidden = false;
 
-  const close = document.getElementById('info-close');
-  close.addEventListener('click', () => {
+  document.querySelector('#info-close').onclick = function () {
     info.hidden = true;
-  });
+  };
 }
 
 function hideInfo() {
