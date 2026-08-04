@@ -59,19 +59,60 @@
     const days   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
     const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
-    try {
-      document.getElementById('tz').textContent = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    } catch(e) {}
+    const tz = (() => {
+      try { return Intl.DateTimeFormat().resolvedOptions().timeZone; }
+      catch (e) { return 'UTC'; }
+    })();
+
+    // Offset (ms) to add to the browser's Date.now() to get the real server time.
+    // Stays 0 (i.e. falls back to the local clock) until a sync succeeds.
+    let offset = 0;
+
+    function setTzLabel(status) {
+      document.getElementById('tz').textContent = tz + (status ? ' · ' + status : '');
+    }
+
+    async function syncTime() {
+      try {
+        const t0 = performance.now();
+        const res = await fetch(
+          'https://timeapi.io/api/Time/current/zone?timeZone=' + encodeURIComponent(tz),
+          { cache: 'no-store' }
+        );
+        const t1 = performance.now();
+        if (!res.ok) throw new Error('bad response');
+        const data = await res.json();
+
+        // dateTime comes back as a wall-clock string with no offset suffix (e.g.
+        // "2026-08-04T14:32:07.123"), so new Date() parses it using the browser's
+        // own local timezone — which is correct here since we requested the same
+        // timezone the browser reports.
+        const serverMs = new Date(data.dateTime).getTime();
+        if (isNaN(serverMs)) throw new Error('unparseable time');
+
+        // account for the round-trip network delay
+        offset = (serverMs + (t1 - t0) / 2) - Date.now();
+        setTzLabel('synced');
+      } catch (e) {
+        offset = 0;
+        setTzLabel('local clock');
+      }
+    }
 
     function update() {
-      const now = new Date();
-      document.title = now.toLocaleTimeString();
-      document.getElementById('time').textContent = now.toLocaleTimeString();
+      const now = new Date(Date.now() + offset);
+      const timeStr = now.toLocaleTimeString();
+      document.title = timeStr;
+      document.getElementById('time').textContent = timeStr;
       document.getElementById('date').textContent =
         days[now.getDay()] + ', ' + months[now.getMonth()] + ' ' + now.getDate() + ' ' + now.getFullYear();
     }
+
+    setTzLabel('syncing…');
+    syncTime();
     update();
     setInterval(update, 1000);
+    setInterval(syncTime, 5 * 60 * 1000); // re-sync every 5 minutes
   </script>
 </body>
 </html>
