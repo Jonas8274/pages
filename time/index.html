@@ -166,14 +166,17 @@ function hideInfo() {
 }
     }
 
-    function update() {
-      const now = new Date(Date.now() + offset);
-      const timeStr = now.toLocaleTimeString();
-      document.title = timeStr;
-      document.getElementById('time').textContent = timeStr;
-      document.getElementById('date').textContent =
-        days[now.getDay()] + ', ' + months[now.getMonth()] + ' ' + now.getDate() + ' ' + now.getFullYear();
-    }
+  function update() {
+  const now = new Date(Date.now() + offset);
+  const timeStr = now.toLocaleTimeString();
+  document.title = timeStr;
+  document.getElementById('time').textContent = timeStr;
+  document.getElementById('date').textContent =
+    days[now.getDay()] + ', ' +
+    months[now.getMonth()] + ' ' +
+    now.getDate() + ' ' +
+    now.getFullYear();
+}
 
     setStatus('syncing…');
     syncTime();
