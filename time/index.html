@@ -51,6 +51,9 @@
   cursor: pointer;
   line-height: 1;
   padding: 0;
+  pointer-events: auto;
+  position: relative;
+  z-index: 10;
 }
 #info button:hover {
   color: #fff;
@@ -99,15 +102,18 @@
 
 function showInfo(text) {
   const info = document.getElementById('info');
+
   info.innerHTML = `
     <span>${text}</span>
-    <button id="info-close" aria-label="Dismiss">×</button>
+    <button type="button" id="info-close" aria-label="Dismiss">×</button>
   `;
+
   info.hidden = false;
 
-  document.getElementById('info-close').onclick = () => {
+  const close = document.getElementById('info-close');
+  close.addEventListener('click', () => {
     info.hidden = true;
-  };
+  });
 }
 
 function hideInfo() {
