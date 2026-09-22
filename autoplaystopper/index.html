@@ -307,7 +307,7 @@
 (function () {
   const LINKS = {
     mv3:     'https://chromewebstore.google.com/detail/autoplaystopper-mv3/gcendpekmacfohmhhkbhejjfbepkkkib',
-    mv2:     'https://chromewebstore.google.com/detail/autoplaystopper/ejddcgojdblidajhngkogefpkknnebdh',
+    mv2:     'https://chrome-stats.com/d/ejddcgojdblidajhngkogefpkknnebdh',
     firefox_dl: 'https://www.mozilla.org/firefox/',
     brave:   'https://chromewebstore.google.com/detail/autoplaystopper-mv3/gcendpekmacfohmhhkbhejjfbepkkkib',
     edge:    'https://chromewebstore.google.com/detail/autoplaystopper-mv3/gcendpekmacfohmhhkbhejjfbepkkkib',
@@ -386,7 +386,7 @@
         title: 'AutoplayStopper MV3',
         badge: 'Recommended',
         badgeClass: 'badge-blue',
-        desc: 'Actively maintained MV3 rewrite. Per-site Default/Allow/Block control, works on Chrome 104+. (in my experience it works worse than the mv2 varient and has not been updated since 2025)',
+        desc: 'Kinda semi-maintained MV3 rewrite. Per-site Default/Allow/Block control. (in my experience it works worse than the mv2 varient and has not been updated since 2025)',
         link: LINKS.mv3,
         btnLabel: 'Install MV3',
         btnPrimary: true,
@@ -398,11 +398,11 @@
         title: 'AutoplayStopper (original)',
         badge: 'MV2 · Limited',
         badgeClass: 'badge-amber',
-desc: 'Original MV2 version its broken on newer versions of chrome that dont support mv2 and its alos not supported by the developer who last updated it back in 2023 seems offline but still listed if you want to try it on another browser. See the <a href="https://developer.chrome.com/docs/extensions/develop/migrate/mv2-deprecation-timeline" target="_blank">MV2 deprecation timeline</a> for details.',        link: LINKS.mv2,
+desc: 'Original MV2 version its broken on newer versions of chrome that dont support mv2 and its alos not supported by the developer who last updated it back in 2023 seems offline but still listed if you want to try it on another browser. See the <a href="https://developer.chrome.com/docs/extensions/develop/migrate/mv2-deprecation-timeline" target="_blank">MV2 deprecation timeline</a> for details (update has been rmoved from the chrome web store the link will now redirect to chrome stats)',        link: LINKS.mv2,
         btnLabel: 'View',
         btnPrimary: false,
       });
-      noteHTML = `⚠ The original autoplayStopper is not supported anymore. Install the <strong>MV3 version</strong> above it's a full rewrite with active maintenance.`;
+      noteHTML = `⚠ The original autoplayStopper is not supported anymore. Install the <strong>MV3 version</strong> above it's a full rewrite with semi-active maintenance.`;
     }
 
     else if (browser === 'firefox') {
