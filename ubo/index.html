@@ -304,6 +304,7 @@
       firefox_dl: 'https://www.mozilla.org/firefox/',
       uboMv3:   'https://github.com/uBlockOrigin/uBlock-issues/wiki/About-Google-Chrome%27s-%22This-extension-may-soon-no-longer-be-supported%22',
       subol:   'https://apps.apple.com/us/app/ublock-origin-lite/id6745342698',
+      eubol:   'https://microsoftedge.microsoft.com/addons/detail/ublock-origin-lite/cimighlppcgcoapaliogpjjdehbnofhn',
     };
 
     function detect() {
@@ -444,6 +445,18 @@
           link: LINKS.edge,
           btnLabel: 'Add to Edge',
           btnPrimary: true,
+        });
+        html += card({
+          primary: false,
+          iconHtml: shieldSvg('#854F0B', true),
+          iconBg: 'amber',
+          title: 'uBlock Origin Lite',
+          badge: 'MV3 · Limited',
+          badgeClass: 'badge-amber',
+          desc: "Built for Chrome's Manifest V3. So it works slightly worse (they have added lots of uBO's functions into uBOL)",
+          link: LINKS.eubol,
+          btnLabel: 'Install Lite',
+          btnPrimary: false,
         });
         noteHTML = `⚠ Edge has followed Chrome's Manifest V3 deprecation. Consider switching to <a href="${LINKS.firefox_dl}" target="_blank" rel="noopener">Firefox</a>.`;
       }
