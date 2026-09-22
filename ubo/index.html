@@ -296,13 +296,14 @@
   (function () {
     const LINKS = {
       firefox:  'https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/',
-      brave:    'https://chromewebstore.google.com/detail/ublock-origin/cjpalhdlnbpafiamejdnhcphjbkeiagm',
+      brave:    'https://github.com/gorhill/ublock#ublock-origin-ubo',
       edge:     'https://microsoftedge.microsoft.com/addons/detail/ublock-origin/odfafepnkmbhccpbejgmiehpchacaeak',
       opera:    'https://addons.opera.com/en/extensions/details/ublock/',
-      ubo:      'https://chromewebstore.google.com/detail/ublock-origin/cjpalhdlnbpafiamejdnhcphjbkeiagm',
+      ubo:      'https://github.com/gorhill/ublock#ublock-origin-ubo',
       ubol:     'https://chromewebstore.google.com/detail/ublock-origin-lite/ddkjiahejlhfcafbddmgiahcphecmpfh',
       firefox_dl: 'https://www.mozilla.org/firefox/',
       uboMv3:   'https://github.com/uBlockOrigin/uBlock-issues/wiki/About-Google-Chrome%27s-%22This-extension-may-soon-no-longer-be-supported%22',
+      subol:   'https://apps.apple.com/us/app/ublock-origin-lite/id6745342698',
     };
 
     function detect() {
@@ -381,7 +382,7 @@
           title: 'uBlock Origin',
           badge: 'Full version',
           badgeClass: 'badge-red',
-          desc: `The full-featured blocker. Note: Chrome may flag it as unsupported due to <a href="${LINKS.uboMv3}" target="_blank" rel="noopener">MV3 changes</a>`,
+          desc: `The full-featured blocker. Note: Chrome removed it from the web store link now redirects to the uBO github <a href="${LINKS.uboMv3}" target="_blank" rel="noopener">notice</a>`,
           link: LINKS.ubo,
           btnLabel: 'Install uBO',
           btnPrimary: true,
@@ -424,7 +425,7 @@
           title: 'uBlock Origin for Brave',
           badge: 'Full support',
           badgeClass: 'badge-red',
-          desc: 'Brave supports the full uBlock Origin with MV2 compatibility workarounds built in.',
+          desc: 'Brave supports the full uBlock Origin with MV2 compatibility workarounds built in. <a href="https://brave.com/blog/brave-shields-manifest-v3/">brave notice</a>',
           link: LINKS.brave,
           btnLabel: 'Add to Brave',
           btnPrimary: true,
@@ -437,14 +438,14 @@
           iconHtml: shieldSvg('#0F6E56', false),
           iconBg: 'red',
           title: 'uBlock Origin for Edge',
-          badge: 'Full support',
+          badge: 'Losing support',
           badgeClass: 'badge-red',
-          desc: 'Currently available on the Edge Add-ons store with full functionality.',
+          desc: 'Edge is removing it also <a href="https://learn.microsoft.com/en-us/microsoft-edge/extensions/developer-guide/manifest-v3">timeline</a>',
           link: LINKS.edge,
           btnLabel: 'Add to Edge',
           btnPrimary: true,
         });
-        noteHTML = `⚠ Edge may follow Chrome's Manifest V3 deprecation in the future. For guaranteed long-term support, consider switching to <a href="${LINKS.firefox_dl}" target="_blank" rel="noopener">Firefox</a>.`;
+        noteHTML = `⚠ Edge has followed Chrome's Manifest V3 deprecation. Consider switching to <a href="${LINKS.firefox_dl}" target="_blank" rel="noopener">Firefox</a>.`;
       }
 
       else if (browser === 'opera') {
@@ -471,8 +472,8 @@
           badge: '',
           badgeClass: '',
           desc: 'uBlock Origin dropped Safari support after version 13.',
-          link: LINKS.firefox_dl,
-          btnLabel: 'Get Firefox',
+          link: LINKS.subol,
+          btnLabel: 'Get uBlockOriginLite',
           btnPrimary: false,
           disabled: true,
         });
@@ -488,7 +489,7 @@
           btnLabel: 'Get Firefox',
           btnPrimary: true,
         });
-        noteHTML = `uBlock Origin is unavailable for Safari. Firefox is recommended for ad blocking on macOS and iOS.`;
+        noteHTML = `uBlock Origin is unavailable for Safari. <a href="https://brave.com">Brave</a> is recommended for ad blocking on iOS Firefox is recommended for mac.`;
       }
 
       else {
