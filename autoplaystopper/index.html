@@ -312,6 +312,7 @@
     brave:   'https://chromewebstore.google.com/detail/autoplaystopper-mv3/gcendpekmacfohmhhkbhejjfbepkkkib',
     edge:    'https://chromewebstore.google.com/detail/autoplaystopper-mv3/gcendpekmacfohmhhkbhejjfbepkkkib',
     opera:   'https://chromewebstore.google.com/detail/autoplaystopper-mv3/gcendpekmacfohmhhkbhejjfbepkkkib',
+    brave_dl:   'https://brave.com',
   };
 
   function detect() {
@@ -381,15 +382,27 @@
     if (browser === 'chrome') {
       html += card({
         primary: true,
-        iconHtml: pauseSvg('#2563EB'),
+        iconHtml: '🌐',
         iconBg: 'blue',
-        title: 'AutoplayStopper MV3',
+        title: 'Other browsers',
         badge: 'Recommended',
         badgeClass: 'badge-blue',
-        desc: 'Kinda semi-maintained MV3 rewrite. Per-site Default/Allow/Block control. (in my experience it works worse than the mv2 varient and has not been updated since 2025)',
-        link: LINKS.mv3,
-        btnLabel: 'Install MV3',
+        desc: 'its like the only option now',
+        link: LINKS.PLACEHOLDER,
+        btnLabel: 'Get',
         btnPrimary: true,
+      });
+      html += card({
+        primary: false,
+        iconHtml: halfpauseSvg('#888780'),
+        iconBg: 'gray',
+        title: 'AutoplayStopper MV3',
+        badge: 'Broken',
+        badgeClass: 'badge-amber',
+        desc: 'developer has noted that support has ended for the extension and urges people to move to other browsers like <a href="${LINKS.brave_dl}" target="_blank" rel="noopener noreferrer">brave</a> or <a href="${LINKS.firefox_dl}" target="_blank" rel="noopener noreferrer">firefox</a>, yes there are other browsers but those 2 are the main ones, <a href="https://github.com/kenijo/AutoplayStopperMV3/issues/15#issuecomment-5879022897" target="_blank" rel="noopener noreferrer">Source</a> (also other browsers that can block autoplay)',
+        link: LINKS.mv3,
+        btnLabel: 'View',
+        btnPrimary: false,
       });
       html += card({
         primary: false,
@@ -402,7 +415,7 @@ desc: 'Original MV2 version its broken on newer versions of chrome that dont sup
         btnLabel: 'View',
         btnPrimary: false,
       });
-      noteHTML = `⚠ The original autoplayStopper is not supported anymore. Install the <strong>MV3 version</strong> above it's a full rewrite with semi-active maintenance.`;
+      noteHTML = `⚠ autoplayStopper is not supported anymore. Install other browsers above.`;
     }
 
     else if (browser === 'firefox') {
