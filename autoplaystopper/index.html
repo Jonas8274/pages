@@ -57,6 +57,32 @@
       max-width: 560px;
     }
 
+    /* Detect row + browser picker */
+    .detect-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1.5rem;
+    }
+    .picker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text-subtle);
+    }
+    .picker select {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      padding: 4px 8px;
+      border: 1px solid var(--border-strong);
+      border-radius: 6px;
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+    }
+
     /* Logo */
     .logo {
       display: flex;
@@ -127,7 +153,6 @@
       border: 1px solid var(--border);
       border-radius: 6px;
       padding: 4px 10px;
-      margin-bottom: 1.5rem;
     }
     .detected-badge .dot {
       width: 6px;
@@ -284,9 +309,15 @@
     MOST PARTS OF THIS PAGE IS AI GENERATED
   </div>
 
-  <div class="detected-badge">
-    <span class="dot"></span>
-    <span id="browser-label">Detecting browser…</span>
+  <div class="detect-row">
+    <div class="detected-badge">
+      <span class="dot"></span>
+      <span id="browser-label">Detecting browser…</span>
+    </div>
+    <label class="picker" for="browser-select">
+      Wrong browser?
+      <select id="browser-select"></select>
+    </label>
   </div>
 
   <div class="cards" id="cards"></div>
@@ -317,7 +348,14 @@
     braveaps:   'https://www.reddit.com/r/brave_browser/comments/sxezgq/psa_how_to_disable_autoplay_in_brave_browser_2022/',
     edgeaps:   'https://www.microsoft.com/en-us/edge/learning-center/manage-autoplay?form=MA13I2',
     safariaps:   'https://www.reddit.com/r/ios/comments/rh1xf0/turn_off_autoplay_on_safari/',
+    firefoxaps:   'https://support.mozilla.org/en-US/kb/block-autoplay',
   };
+
+  const MV3_DESC = `developer has noted that support has ended for the extension and urges people to move to other browsers like <a href="${LINKS.brave_dl}" target="_blank" rel="noopener noreferrer">brave</a> or <a href="${LINKS.firefox_dl}" target="_blank" rel="noopener noreferrer">firefox</a>, yes there are other browsers but those 2 are the main ones, <a href="https://github.com/kenijo/AutoplayStopperMV3/issues/15#issuecomment-5879022897" target="_blank" rel="noopener noreferrer">Source</a> (also other browsers that can block autoplay)`;
+
+  const MV2_DESC = `Original MV2 version is broken on newer versions of chrome that dont support mv2 and its also not supported by the developer who last updated it back in 2023 seems offline but still listed if you want to try it on another browser. See the <a href="https://developer.chrome.com/docs/extensions/develop/migrate/mv2-deprecation-timeline" target="_blank" rel="noopener noreferrer">MV2 deprecation timeline</a> for details (update: has been removed from the chrome web store the link will now redirect to chrome stats)`;
+
+  const names = { firefox:'Firefox', brave:'Brave', edge:'Edge', opera:'Opera', chrome:'Chrome', safari:'Safari', other:'Unknown browser' };
 
   function detect() {
     const ua = navigator.userAgent;
@@ -325,7 +363,7 @@
     if (/Edg\//.test(ua))          return 'edge';
     if (/OPR\/|Opera\//.test(ua))  return 'opera';
     if (/Firefox\//.test(ua))      return 'firefox';
-    if (/Brave/.test(ua))          return 'brave';
+    if (navigator.brave) return 'brave';
     if (/Chrome\//.test(ua) && /Google Inc/.test(vendor)) return 'chrome';
     if (/Safari\//.test(ua) && /Apple/.test(vendor))      return 'safari';
     return 'other';
@@ -354,11 +392,11 @@
   }
 
   function compassSvg(color) {
-  return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="12" cy="12" r="10"/>
-    <polygon points="16.2 7.8 14.1 14.1 7.8 16.2 9.9 9.9 16.2 7.8" fill="${color}" stroke="none"/>
-  </svg>`;
-}
+    return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="12" cy="12" r="10"/>
+      <polygon points="16.2 7.8 14.1 14.1 7.8 16.2 9.9 9.9 16.2 7.8" fill="${color}" stroke="none"/>
+    </svg>`;
+  }
 
   function card({ primary, iconHtml, iconBg, title, badge, badgeClass, desc, link, btnLabel, btnPrimary, disabled }) {
     return `
@@ -378,14 +416,13 @@
       </div>`;
   }
 
-  function render() {
-    const browser = detect();
+  function render(chosen) {
+    const browser = chosen || detect();
     const label = document.getElementById('browser-label');
     const cards = document.getElementById('cards');
     const note  = document.getElementById('note');
 
-    const names = { firefox:'Firefox', brave:'Brave', edge:'Edge', opera:'Opera', chrome:'Chrome', safari:'Safari', other:'Unknown browser' };
-    label.textContent = 'Detected: ' + names[browser];
+    label.textContent = (chosen ? 'Selected: ' : 'Detected: ') + names[browser];
 
     let html = '';
     let noteHTML = '';
@@ -405,12 +442,12 @@
       });
       html += card({
         primary: false,
-        iconHtml: halfpauseSvg('#888780'),
+        iconHtml: halfPauseSvg('#888780'),
         iconBg: 'gray',
         title: 'AutoplayStopper MV3',
         badge: 'Broken',
         badgeClass: 'badge-amber',
-        desc: 'developer has noted that support has ended for the extension and urges people to move to other browsers like <a href="${LINKS.brave_dl}" target="_blank" rel="noopener noreferrer">brave</a> or <a href="${LINKS.firefox_dl}" target="_blank" rel="noopener noreferrer">firefox</a>, yes there are other browsers but those 2 are the main ones, <a href="https://github.com/kenijo/AutoplayStopperMV3/issues/15#issuecomment-5879022897" target="_blank" rel="noopener noreferrer">Source</a> (also other browsers that can block autoplay)',
+        desc: MV3_DESC,
         link: LINKS.mv3,
         btnLabel: 'View',
         btnPrimary: false,
@@ -422,7 +459,8 @@
         title: 'AutoplayStopper (original)',
         badge: 'MV2 · Limited',
         badgeClass: 'badge-amber',
-desc: 'Original MV2 version its broken on newer versions of chrome that dont support mv2 and its alos not supported by the developer who last updated it back in 2023 seems offline but still listed if you want to try it on another browser. See the <a href="https://developer.chrome.com/docs/extensions/develop/migrate/mv2-deprecation-timeline" target="_blank">MV2 deprecation timeline</a> for details (update: has been removed from the chrome web store the link will now redirect to chrome stats)',        link: LINKS.mv2,
+        desc: MV2_DESC,
+        link: LINKS.mv2,
         btnLabel: 'View',
         btnPrimary: false,
       });
@@ -430,14 +468,26 @@ desc: 'Original MV2 version its broken on newer versions of chrome that dont sup
     }
 
     else if (browser === 'firefox') {
+       html += card({
+        primary: true,
+        iconHtml: '<img src="https://www.google.com/s2/favicons?domain=firefox.com&sz=64" width="20" height="20" alt="">',
+        iconBg: 'blue',
+        title: 'Googleing how the hell to do it',
+        badge: 'Recommended',
+        badgeClass: 'badge-blue',
+        desc: 'be smart',
+        link: LINKS.firefoxaps,
+        btnLabel: 'Method',
+        btnPrimary: true,
+      });
       html += card({
         primary: false,
         iconHtml: halfPauseSvg('#888780'),
         iconBg: 'gray',
-        title: 'Firefox — not supported',
+        title: 'Firefox, no <strong>extension</strong>',
         badge: 'Unavailable',
         badgeClass: 'badge-red',
-        desc: 'AutoplayStopper is not available for Firefox. Switch to a Chromium-based browser (not all can) to use it (or do a quick google search and look how to enable it natively)',
+        desc: '<strong>AutoplayStopper</strong> is not available for Firefox. Switch to a Chromium-based browser (not all can) to use it (or do a quick google search and look how to enable it natively)',
         link: '',
         disabled: true,
       });
@@ -457,14 +507,14 @@ desc: 'Original MV2 version its broken on newer versions of chrome that dont sup
         btnLabel: 'Method',
         btnPrimary: true,
       });
-       html += card({
+      html += card({
         primary: false,
-        iconHtml: halfpauseSvg('#888780'),
+        iconHtml: halfPauseSvg('#888780'),
         iconBg: 'gray',
         title: 'AutoplayStopper MV3',
         badge: 'Broken',
         badgeClass: 'badge-amber',
-        desc: 'developer has noted that support has ended for the extension and urges people to move to other browsers like <a href="${LINKS.brave_dl}" target="_blank" rel="noopener noreferrer">brave</a> or <a href="${LINKS.firefox_dl}" target="_blank" rel="noopener noreferrer">firefox</a>, yes there are other browsers but those 2 are the main ones, <a href="https://github.com/kenijo/AutoplayStopperMV3/issues/15#issuecomment-5879022897" target="_blank" rel="noopener noreferrer">Source</a> (also other browsers that can block autoplay)',
+        desc: MV3_DESC,
         link: LINKS.mv3,
         btnLabel: 'View',
         btnPrimary: false,
@@ -481,13 +531,13 @@ desc: 'Original MV2 version its broken on newer versions of chrome that dont sup
         btnLabel: 'Install original',
         btnPrimary: false,
       });
-      noteHTML = `Tip: Brave has built-in autoplay blocking too. Go to <strong>Settings → Shields → Block auto-play</strong> for a no-extension option.`;
+      noteHTML = `Tip: Brave has built-in autoplay blocking too. Go to <strong>Settings > Privacy and security > Site and Shields Settings > Autoplay</strong> for a no-extension option.`;
     }
 
     else if (browser === 'edge') {
       html += card({
         primary: true,
-        iconHtml: '<img src="https://www.google.com/s2/favicons?domain=https://www.microsoft.com/edge&sz=64" width="20" height="20" alt="">',
+        iconHtml: '<img src="https://www.google.com/s2/favicons?domain=microsoft.com&sz=64" width="20" height="20" alt="">',
         iconBg: 'blue',
         title: 'Googleing how the hell to do it',
         badge: 'Recommended',
@@ -514,12 +564,12 @@ desc: 'Original MV2 version its broken on newer versions of chrome that dont sup
       });
       html += card({
         primary: false,
-        iconHtml: halfpauseSvg('#888780'),
+        iconHtml: halfPauseSvg('#888780'),
         iconBg: 'gray',
         title: 'AutoplayStopper MV3',
         badge: 'Broken',
         badgeClass: 'badge-amber',
-        desc: 'developer has noted that support has ended for the extension and urges people to move to other browsers like <a href="${LINKS.brave_dl}" target="_blank" rel="noopener noreferrer">brave</a> or <a href="${LINKS.firefox_dl}" target="_blank" rel="noopener noreferrer">firefox</a>, yes there are other browsers but those 2 are the main ones, <a href="https://github.com/kenijo/AutoplayStopperMV3/issues/15#issuecomment-5879022897" target="_blank" rel="noopener noreferrer">Source</a> (also other browsers that can block autoplay)',
+        desc: MV3_DESC,
         link: LINKS.mv3,
         btnLabel: 'View',
         btnPrimary: false,
@@ -531,7 +581,8 @@ desc: 'Original MV2 version its broken on newer versions of chrome that dont sup
         title: 'AutoplayStopper (original)',
         badge: 'MV2 · Limited',
         badgeClass: 'badge-amber',
-desc: 'Original MV2 version its broken on newer versions of chrome that dont support mv2 and its alos not supported by the developer who last updated it back in 2023 seems offline but still listed if you want to try it on another browser. See the <a href="https://developer.chrome.com/docs/extensions/develop/migrate/mv2-deprecation-timeline" target="_blank">MV2 deprecation timeline</a> for details (update: has been removed from the chrome web store the link will now redirect to chrome stats)',        link: LINKS.mv2,
+        desc: MV2_DESC,
+        link: LINKS.mv2,
         btnLabel: 'View',
         btnPrimary: false,
       });
@@ -543,14 +594,14 @@ desc: 'Original MV2 version its broken on newer versions of chrome that dont sup
         primary: false,
         iconHtml: halfPauseSvg('#888780'),
         iconBg: 'gray',
-        title: 'Safari — not supported',
+        title: 'Safari — not supported (on browser)',
         badge: '',
         badgeClass: '',
-        desc: 'AutoplayStopper is not available for Safari.',
+        desc: 'AutoplayStopper is not available for <strong>Safari</strong>.',
         link: '',
         disabled: true,
       });
-            html += card({
+      html += card({
         primary: true,
         iconHtml: '🌐',
         iconBg: 'blue',
@@ -562,7 +613,7 @@ desc: 'Original MV2 version its broken on newer versions of chrome that dont sup
         btnLabel: 'Get',
         btnPrimary: true,
       });
-            html += card({
+      html += card({
         primary: true,
         iconHtml: compassSvg('#006CFF'),
         iconBg: 'blue',
@@ -578,19 +629,34 @@ desc: 'Original MV2 version its broken on newer versions of chrome that dont sup
     }
 
     else {
-      html += card({ primary: true,  iconHtml: pauseSvg('#2563EB'),    iconBg: 'blue', title: 'Chrome / Edge / Brave / Opera', badge: 'MV3',    badgeClass: 'badge-blue', desc: 'Install the MV3 version — works on all Chromium-based browsers.',  link: LINKS.mv3, btnLabel: 'Install MV3', btnPrimary: true });
-      html += card({ primary: false, iconHtml: halfPauseSvg('#888780'), iconBg: 'gray', title: 'Original (MV2)',                 badge: 'Broken', badgeClass: 'badge-red',  desc: 'No longer works on modern Chrome due to MV2 deprecation.',          link: LINKS.mv2, btnLabel: 'View',        btnPrimary: false, disabled: true });
+      html += card({ primary: false, iconHtml: halfPauseSvg('#888780'), iconBg: 'gray', title: 'MV3', badge: 'Broken', badgeClass: 'badge-red', desc: MV3_DESC, link: LINKS.mv3, btnLabel: 'View', btnPrimary: false });
+      html += card({ primary: false, iconHtml: halfPauseSvg('#888780'), iconBg: 'gray', title: 'Original (MV2)', badge: 'Broken', badgeClass: 'badge-red', desc: 'No longer works on modern Chrome due to MV2 deprecation.', link: LINKS.mv2, btnLabel: 'View', btnPrimary: false, disabled: true });
     }
 
     cards.innerHTML = html;
-
-    if (noteHTML) {
-      note.style.display = 'block';
-      note.innerHTML = noteHTML;
-    }
+    note.innerHTML = noteHTML;
+    note.style.display = noteHTML ? 'block' : 'none';
   }
 
-  render();
+  const select = document.getElementById('browser-select');
+  select.innerHTML =
+    `<option value="">Auto (${names[detect()]})</option>` +
+    Object.keys(names).map(k => `<option value="${k}">${names[k]}</option>`).join('');
+
+  try {
+    const saved = localStorage.getItem('browserChoice');
+    if (saved && names[saved]) select.value = saved;
+  } catch (e) {}
+
+  select.addEventListener('change', () => {
+    try {
+      if (select.value) localStorage.setItem('browserChoice', select.value);
+      else localStorage.removeItem('browserChoice');
+    } catch (e) {}
+    render(select.value);
+  });
+
+  render(select.value);
 })();
 </script>
 
