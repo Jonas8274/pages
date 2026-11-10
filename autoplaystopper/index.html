@@ -315,6 +315,7 @@
     brave_dl:   'https://brave.com',
     otherbrowsers:   'https://jonas8272.codeberg.page/autoplaystopper-other-browsers',
     braveaps:   'https://www.reddit.com/r/brave_browser/comments/sxezgq/psa_how_to_disable_autoplay_in_brave_browser_2022/',
+    edgeaps:   'https://www.microsoft.com/en-us/edge/learning-center/manage-autoplay?form=MA13I2',
   };
 
   function detect() {
@@ -478,14 +479,14 @@ desc: 'Original MV2 version its broken on newer versions of chrome that dont sup
     else if (browser === 'edge') {
       html += card({
         primary: true,
-        iconHtml: pauseSvg('#2563EB'),
+        iconHtml: '<img src="https://www.google.com/s2/favicons?domain=https://www.microsoft.com/edge&sz=64" width="20" height="20" alt="">',
         iconBg: 'blue',
-        title: 'AutoplayStopper MV3',
+        title: 'Googleing how the hell to do it',
         badge: 'Recommended',
         badgeClass: 'badge-blue',
-        desc: 'Install the MV3 version from the Chrome Web Store — works on Edge via Chromium compatibility.',
-        link: LINKS.edge,
-        btnLabel: 'Add to Edge',
+        desc: 'be smart',
+        link: LINKS.edgeaps,
+        btnLabel: 'Method',
         btnPrimary: true,
       });
     }
