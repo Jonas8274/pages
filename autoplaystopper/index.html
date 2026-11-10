@@ -314,6 +314,7 @@
     opera:   'https://chromewebstore.google.com/detail/autoplaystopper-mv3/gcendpekmacfohmhhkbhejjfbepkkkib',
     brave_dl:   'https://brave.com',
     otherbrowsers:   'https://jonas8272.codeberg.page/autoplaystopper-other-browsers',
+    braveaps:   'https://www.reddit.com/r/brave_browser/comments/sxezgq/psa_how_to_disable_autoplay_in_brave_browser_2022/',
   };
 
   function detect() {
@@ -437,24 +438,36 @@ desc: 'Original MV2 version its broken on newer versions of chrome that dont sup
     else if (browser === 'brave') {
       html += card({
         primary: true,
-        iconHtml: pauseSvg('#2563EB'),
+        iconHtml: '<img src="https://www.google.com/s2/favicons?domain=brave.com&sz=64" width="20" height="20" alt="">',
         iconBg: 'blue',
-        title: 'AutoplayStopper MV3',
+        title: 'Googleing how the hell to do it',
         badge: 'Recommended',
         badgeClass: 'badge-blue',
-        desc: 'Actively maintained MV3 rewrite. Per-site Default/Allow/Block control.',
-        link: LINKS.mv3,
-        btnLabel: 'Install MV3',
+        desc: 'be smart',
+        link: LINKS.braveaps,
+        btnLabel: 'Method',
         btnPrimary: true,
+      });
+       html += card({
+        primary: false,
+        iconHtml: halfpauseSvg('#888780'),
+        iconBg: 'gray',
+        title: 'AutoplayStopper MV3',
+        badge: 'Broken',
+        badgeClass: 'badge-amber',
+        desc: 'developer has noted that support has ended for the extension and urges people to move to other browsers like <a href="${LINKS.brave_dl}" target="_blank" rel="noopener noreferrer">brave</a> or <a href="${LINKS.firefox_dl}" target="_blank" rel="noopener noreferrer">firefox</a>, yes there are other browsers but those 2 are the main ones, <a href="https://github.com/kenijo/AutoplayStopperMV3/issues/15#issuecomment-5879022897" target="_blank" rel="noopener noreferrer">Source</a> (also other browsers that can block autoplay)',
+        link: LINKS.mv3,
+        btnLabel: 'View',
+        btnPrimary: false,
       });
       html += card({
         primary: false,
         iconHtml: pauseSvg('#854F0B'),
         iconBg: 'amber',
         title: 'AutoplayStopper (original)',
-        badge: 'MV2 · Brave only',
+        badge: 'Useless',
         badgeClass: 'badge-amber',
-        desc: 'Original MV2 version. Brave still supports MV2 extensions, so this works on Brave.',
+        desc: 'Original MV2 version. Brave still supports MV2 extensions, so this should work on Brave although it might not necessarily work cause of google and its kind of useless cause you can just block it nativly just like <a href="https://www.reddit.com/r/brave_browser/comments/sxezgq/psa_how_to_disable_autoplay_in_brave_browser_2022/" target="_blank" rel="noopener noreferrer">google</a> how to do it (yes I alr helped u google)',
         link: LINKS.mv2,
         btnLabel: 'Install original',
         btnPrimary: false,
