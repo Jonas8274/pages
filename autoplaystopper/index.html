@@ -494,16 +494,40 @@ desc: 'Original MV2 version its broken on newer versions of chrome that dont sup
     else if (browser === 'opera') {
       html += card({
         primary: true,
-        iconHtml: pauseSvg('#2563EB'),
+        iconHtml: '🌐',
         iconBg: 'blue',
-        title: 'AutoplayStopper MV3',
-        badge: 'Supported',
+        title: 'Other browsers',
+        badge: 'Recommended',
         badgeClass: 'badge-blue',
-        desc: 'Install via Chrome Web Store — compatible with Opera through Chromium extension support.',
-        link: LINKS.opera,
-        btnLabel: 'Add to Opera',
+        desc: 'its like the only option now',
+        link: LINKS.otherbrowsers,
+        btnLabel: 'Get',
         btnPrimary: true,
       });
+      html += card({
+        primary: false,
+        iconHtml: halfpauseSvg('#888780'),
+        iconBg: 'gray',
+        title: 'AutoplayStopper MV3',
+        badge: 'Broken',
+        badgeClass: 'badge-amber',
+        desc: 'developer has noted that support has ended for the extension and urges people to move to other browsers like <a href="${LINKS.brave_dl}" target="_blank" rel="noopener noreferrer">brave</a> or <a href="${LINKS.firefox_dl}" target="_blank" rel="noopener noreferrer">firefox</a>, yes there are other browsers but those 2 are the main ones, <a href="https://github.com/kenijo/AutoplayStopperMV3/issues/15#issuecomment-5879022897" target="_blank" rel="noopener noreferrer">Source</a> (also other browsers that can block autoplay)',
+        link: LINKS.mv3,
+        btnLabel: 'View',
+        btnPrimary: false,
+      });
+      html += card({
+        primary: false,
+        iconHtml: halfPauseSvg('#888780'),
+        iconBg: 'gray',
+        title: 'AutoplayStopper (original)',
+        badge: 'MV2 · Limited',
+        badgeClass: 'badge-amber',
+desc: 'Original MV2 version its broken on newer versions of chrome that dont support mv2 and its alos not supported by the developer who last updated it back in 2023 seems offline but still listed if you want to try it on another browser. See the <a href="https://developer.chrome.com/docs/extensions/develop/migrate/mv2-deprecation-timeline" target="_blank">MV2 deprecation timeline</a> for details (update: has been removed from the chrome web store the link will now redirect to chrome stats)',        link: LINKS.mv2,
+        btnLabel: 'View',
+        btnPrimary: false,
+      });
+      noteHTML = `⚠ autoplayStopper is not supported anymore. Install other browsers above.`;
     }
 
     else if (browser === 'safari') {
@@ -518,7 +542,19 @@ desc: 'Original MV2 version its broken on newer versions of chrome that dont sup
         link: '',
         disabled: true,
       });
-      noteHTML = `AutoplayStopper is unavailable for Safari. It works on Chrome, Brave, Edge, Opera, and other Chromium-based browsers.`;
+            html += card({
+        primary: true,
+        iconHtml: '🌐',
+        iconBg: 'blue',
+        title: 'Other browsers',
+        badge: 'Recommended',
+        badgeClass: 'badge-blue',
+        desc: '',
+        link: LINKS.otherbrowsers,
+        btnLabel: 'Get',
+        btnPrimary: true,
+      });
+      noteHTML = `Stopping autoplay (in general) is not available for Safari. It works on Brave, Edge and some other Chromium-based browsers (or do a quick google search and look how to enable it natively)`;
     }
 
     else {
