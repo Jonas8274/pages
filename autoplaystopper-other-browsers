@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Browsers</title>
+</head>
+<body>
+<h1>Browsers</h1>
+<ul>
+<li><a href="https://brave.com/">Brave</a></li>
+<li><a href="https://www.microsoft.com/edge">Edge</a> (yuck)</li>
+<li><a href="https://vivaldi.com/">Vivaldi</a></li>
+<li><a href="https://www.firefox.com/">Firefox</a></li>
+</ul>
+
+<h2>How to stop autoplay</h2>
+
+<h3>Firefox</h3>
+<p>Settings &gt; Privacy &amp; Security &gt; Permissions &gt; Autoplay &gt; Settings&hellip;<br>
+Set "Default for all websites" to <b>Block Audio and Video</b>, then click Save Changes.<br>
+(Firefox already blocks autoplay with sound by default. This also blocks muted video.)</p>
+
+<h3>Edge</h3>
+<p>Settings &gt; Cookies and site permissions &gt; Media autoplay<br>
+(or open <code>edge://settings/content/mediaAutoplay</code>)<br>
+Set it to <b>Block</b>. "Limit" is gentler and is the default.</p>
+
+<h3>Brave</h3>
+<p>Open <code>brave://settings/content/autoplay</code><br>
+(or Settings &gt; Privacy and security &gt; Site and Shields Settings &gt; Autoplay)<br>
+Set it to <b>Block</b>.</p>
+
+<h3>Vivaldi</h3>
+<p>Settings &gt; Privacy and Security &gt; Default Permissions<br>
+Set Autoplay to <b>Block</b>. On newer versions it may be under Settings &gt; Webpages &gt; Site Settings.</p>
+
+<p><i>Note: Brave, Edge and Vivaldi are all built on Chromium, and none of them can stop every video and some sites will get around the setting. If a site still autoplays, an extension that disables HTML5 autoplay may help (although I havent faced any issues).</i></p>
+
+<p><i>Another note: I got all my guides from reddit and am not able to test each browser fully (you can contact me at https://jonas8272.codeberg.page/socials</i></p>
+</body>
+</html>
