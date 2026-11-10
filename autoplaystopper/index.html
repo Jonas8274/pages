@@ -316,6 +316,7 @@
     otherbrowsers:   'https://jonas8272.codeberg.page/autoplaystopper-other-browsers',
     braveaps:   'https://www.reddit.com/r/brave_browser/comments/sxezgq/psa_how_to_disable_autoplay_in_brave_browser_2022/',
     edgeaps:   'https://www.microsoft.com/en-us/edge/learning-center/manage-autoplay?form=MA13I2',
+    safariaps:   'https://www.reddit.com/r/ios/comments/rh1xf0/turn_off_autoplay_on_safari/',
   };
 
   function detect() {
@@ -351,6 +352,13 @@
       <path d="M2 13H14" stroke="${color}" stroke-width="1.6" stroke-linecap="round"/>
     </svg>`;
   }
+
+  function compassSvg(color) {
+  return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="12" cy="12" r="10"/>
+    <polygon points="16.2 7.8 14.1 14.1 7.8 16.2 9.9 9.9 16.2 7.8" fill="${color}" stroke="none"/>
+  </svg>`;
+}
 
   function card({ primary, iconHtml, iconBg, title, badge, badgeClass, desc, link, btnLabel, btnPrimary, disabled }) {
     return `
@@ -552,6 +560,18 @@ desc: 'Original MV2 version its broken on newer versions of chrome that dont sup
         desc: '',
         link: LINKS.otherbrowsers,
         btnLabel: 'Get',
+        btnPrimary: true,
+      });
+            html += card({
+        primary: true,
+        iconHtml: compassSvg('#006CFF'),
+        iconBg: 'blue',
+        title: 'Googleing how the hell to do it (idk if it works tho)',
+        badge: 'also recommended but slightly less cause idk if it works',
+        badgeClass: 'badge-blue',
+        desc: 'being smart',
+        link: LINKS.safariaps,
+        btnLabel: 'Method',
         btnPrimary: true,
       });
       noteHTML = `Stopping autoplay (in general) is not available for Safari. It works on Brave, Edge and some other Chromium-based browsers (or do a quick google search and look how to enable it natively)`;
