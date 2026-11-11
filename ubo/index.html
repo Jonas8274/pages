@@ -460,7 +460,7 @@
           title: 'uBlock Origin for Edge',
           badge: 'Losing support',
           badgeClass: 'badge-red',
-          desc: 'Edge is removing it also <a href="https://learn.microsoft.com/en-us/microsoft-edge/extensions/developer-guide/manifest-v3" target="_blank" rel="noopener">timeline</a>',
+          desc: 'Edge is removing it also <a href="https://learn.microsoft.com/en-us/microsoft-edge/extensions/developer-guide/manifest-v3" target="_blank" rel="noopener">timeline</a>, <a href="https://blogs.windows.com/msedgedev/2026/08/07/moving-the-microsoft-edge-extensions-ecosystem-forward-with-manifest-version-3/" target="_blank" rel="noopener">source</a>',
           link: LINKS.edge,
           btnLabel: 'Add to Edge',
           btnPrimary: true,
@@ -516,10 +516,22 @@
           title: 'Try Firefox instead',
           badge: 'Recommended',
           badgeClass: 'badge-red',
-          desc: 'Full uBlock Origin support on macOS. Free download.',
+          desc: 'Full uBlock Origin support on macOS. Free download. (of course other browsers are also supported you can see them <a href="https://github.com/gorhill/ublock#ublock-origin-ubo">here</a>',
           link: LINKS.firefox_dl,
           btnLabel: 'Get Firefox',
           btnPrimary: true,
+        });
+        html += card({
+          primary: false,
+          iconHtml: shieldSvg('#854F0B', true),
+          iconBg: 'amber',
+          title: 'uBlock Origin Lite',
+          badge: 'MV3 · Limited',
+          badgeClass: 'badge-amber',
+          desc: "Built for Safari. But it works slightly worse compared to uBO (they have added lots of uBO's functions into uBOL)",
+          link: LINKS.subol,
+          btnLabel: 'Install Lite',
+          btnPrimary: false,
         });
         noteHTML = `uBlock Origin is unavailable for Safari. <a href="https://brave.com">Brave</a> is recommended for ad blocking on iOS Firefox is recommended for mac.`;
       }
