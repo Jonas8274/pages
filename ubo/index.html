@@ -12,11 +12,11 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
---red-50: #FDE8E8;
---red-100: #F8B4B4;
---red-400: #E02424;
---red-600: #C81E1E;
---red-800: #9B1C1C;
+      --red-50: #FDE8E8;
+      --red-100: #F8B4B4;
+      --red-400: #E02424;
+      --red-600: #C81E1E;
+      --red-800: #9B1C1C;
       --amber-50: #FAEEDA;
       --amber-600: #854F0B;
       --amber-800: #633806;
@@ -37,22 +37,21 @@
       --radius: 10px;
       --radius-lg: 14px;
     }
+
     .ai-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 1.5rem;
-  padding: 6px 12px;
-
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-
-  color: #854F0B;
-  background: #FAEEDA;
-  border: 1px solid #F3D39A;
-  border-radius: 999px;
-}
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 1.5rem;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      color: #854F0B;
+      background: #FAEEDA;
+      border: 1px solid #F3D39A;
+      border-radius: 999px;
+    }
 
     body {
       font-family: 'DM Sans', sans-serif;
@@ -104,6 +103,32 @@
       line-height: 1.5;
     }
 
+    /* Detect row + browser picker */
+    .detect-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1.5rem;
+    }
+    .picker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text-subtle);
+    }
+    .picker select {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      padding: 4px 8px;
+      border: 1px solid var(--border-strong);
+      border-radius: 6px;
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+    }
+
     /* Detected badge */
     .detected-badge {
       display: inline-flex;
@@ -116,7 +141,6 @@
       border: 1px solid var(--border);
       border-radius: 6px;
       padding: 4px 10px;
-      margin-bottom: 1.5rem;
     }
     .detected-badge .dot {
       width: 6px;
@@ -144,7 +168,7 @@
       border-color: var(--red-400);
       background: linear-gradient(135deg, #FAFFFE 0%, #FFEAEB 100%);
     }
-    .card.primary:hover { border-color: var(--red-600)); box-shadow: 0 2px 16px rgba(29,158,117,0.12); }
+    .card.primary:hover { border-color: var(--red-600); box-shadow: 0 2px 16px rgba(200,30,30,0.12); }
     .card.disabled { opacity: 0.6; }
 
     .card-icon {
@@ -156,7 +180,8 @@
       justify-content: center;
       flex-shrink: 0;
     }
-.card-icon.red { background: var(--red-50); }    .card-icon.gray { background: var(--gray-50); }
+    .card-icon.red   { background: var(--red-50); }
+    .card-icon.gray  { background: var(--gray-50); }
     .card-icon.amber { background: var(--amber-50); }
 
     .card-body { flex: 1; min-width: 0; }
@@ -183,10 +208,7 @@
       border-radius: 5px;
       letter-spacing: 0.01em;
     }
-.badge-red {
-  background: var(--red-50);
-  color: var(--red-600);
-}
+    .badge-red   { background: var(--red-50);   color: var(--red-600); }
     .badge-amber { background: var(--amber-50); color: var(--amber-600); }
 
     .btn {
@@ -259,24 +281,31 @@
 
 <main class="section">
 
-<div class="logo">
-  <img
-    class="logo-icon"
-    src="https://raw.githubusercontent.com/gorhill/uBlock/a82fcdb74deaf1844c87b5dfe7080ee1fb64a62e/src/img/ublock.svg"
-    alt="uBlock Origin logo"
-  />
-  <span class="logo-name">uBlock Origin</span>
-</div>
+  <div class="logo">
+    <img
+      class="logo-icon"
+      src="https://raw.githubusercontent.com/gorhill/uBlock/a82fcdb74deaf1844c87b5dfe7080ee1fb64a62e/src/img/ublock.svg"
+      alt="uBlock Origin logo"
+    />
+    <span class="logo-name">uBlock Origin</span>
+  </div>
 
   <h1 class="headline">Block ads &amp; trackers,<br>free and open-source.</h1>
   <p class="subline">Wide-spectrum content blocking with low CPU and memory usage.</p>
-  <div class="ai-badge">
-  MOST PARTS OF THIS PAGE IS AI GENERATED
-</div>
 
-  <div class="detected-badge">
-    <span class="dot"></span>
-    <span id="browser-label">Detecting browser…</span>
+  <div class="ai-badge">
+    SOME PARTS OF THIS PAGE ARE AI GENERATED
+  </div>
+
+  <div class="detect-row">
+    <div class="detected-badge">
+      <span class="dot"></span>
+      <span id="browser-label">Detecting browser…</span>
+    </div>
+    <label class="picker" for="browser-select">
+      Wrong browser?
+      <select id="browser-select"></select>
+    </label>
   </div>
 
   <div class="cards" id="cards"></div>
@@ -307,28 +336,19 @@
       eubol:   'https://microsoftedge.microsoft.com/addons/detail/ublock-origin-lite/cimighlppcgcoapaliogpjjdehbnofhn',
     };
 
+    const names = { firefox:'Firefox', brave:'Brave', edge:'Edge', opera:'Opera', chrome:'Chrome/Chromium', safari:'Safari', other:'Unknown browser' };
+
     function detect() {
       const ua = navigator.userAgent;
       const vendor = navigator.vendor || '';
       if (/Edg\//.test(ua))   return 'edge';
       if (/OPR\/|Opera\//.test(ua)) return 'opera';
       if (/Firefox\//.test(ua)) return 'firefox';
-      if (/Brave/.test(ua))   return 'brave';
+      if (navigator.brave)    return 'brave';
       if (/Chrome\//.test(ua) && /Google Inc/.test(vendor)) return 'chrome';
       if (/Safari\//.test(ua) && /Apple/.test(vendor)) return 'safari';
       return 'other';
     }
-
-    function icon(paths, color) {
-      return `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">${paths.map(p => `<path d="${p}" stroke="${color}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>`).join('')}</svg>`;
-    }
-
-    const ICONS = {
-      shield:    ['M10 2L17 5V10C17 14 13.9 17.4 10 18.5C6.1 17.4 3 14 3 10V5Z'],
-      shieldH:   ['M10 2L17 5V10C17 14 13.9 17.4 10 18.5C6.1 17.4 3 14 3 10V5Z', 'M10 2V18.5'],
-      download:  ['M10 3V13', 'M6 9L10 13L14 9', 'M3 16H17'],
-      arrow:     ['M4 10H16', 'M11 5L16 10L11 15'],
-    };
 
     function shieldSvg(color, half) {
       return `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -363,14 +383,13 @@
         </div>`;
     }
 
-    function render() {
-      const browser = detect();
+    function render(chosen) {
+      const browser = chosen || detect();
       const label = document.getElementById('browser-label');
       const cards = document.getElementById('cards');
       const note  = document.getElementById('note');
 
-      const names = { firefox:'Firefox', brave:'Brave', edge:'Edge', opera:'Opera', chrome:'Chrome/Chromium', safari:'Safari', other:'Unknown browser' };
-      label.textContent = 'Detected: ' + names[browser];
+      label.textContent = (chosen ? 'Selected: ' : 'Detected: ') + names[browser];
 
       let html = '';
       let noteHTML = '';
@@ -426,7 +445,7 @@
           title: 'uBlock Origin for Brave',
           badge: 'Full support',
           badgeClass: 'badge-red',
-          desc: 'Brave supports the full uBlock Origin with MV2 compatibility workarounds built in. <a href="https://brave.com/blog/brave-shields-manifest-v3/">brave notice</a>',
+          desc: 'Brave supports the full uBlock Origin with MV2 compatibility workarounds built in. <a href="https://brave.com/blog/brave-shields-manifest-v3/" target="_blank" rel="noopener">brave notice</a>',
           link: LINKS.brave,
           btnLabel: 'Add to Brave',
           btnPrimary: true,
@@ -441,7 +460,7 @@
           title: 'uBlock Origin for Edge',
           badge: 'Losing support',
           badgeClass: 'badge-red',
-          desc: 'Edge is removing it also <a href="https://learn.microsoft.com/en-us/microsoft-edge/extensions/developer-guide/manifest-v3">timeline</a>',
+          desc: 'Edge is removing it also <a href="https://learn.microsoft.com/en-us/microsoft-edge/extensions/developer-guide/manifest-v3" target="_blank" rel="noopener">timeline</a>',
           link: LINKS.edge,
           btnLabel: 'Add to Edge',
           btnPrimary: true,
@@ -506,20 +525,35 @@
       }
 
       else {
-        html += card({ primary: true, iconHtml: shieldSvg('#0F6E56', false), iconBg: 'red', title: 'Firefox', badge: 'Recommended', badgeClass: 'badge-green', desc: 'Best full uBlock Origin support — recommended by the uBO team.', link: LINKS.firefox, btnLabel: 'Firefox add-on', btnPrimary: true });
+        html += card({ primary: true, iconHtml: shieldSvg('#0F6E56', false), iconBg: 'red', title: 'Firefox', badge: 'Recommended', badgeClass: 'badge-red', desc: 'Best full uBlock Origin support — recommended by the uBO team.', link: LINKS.firefox, btnLabel: 'Firefox add-on', btnPrimary: true });
         html += card({ primary: false, iconHtml: shieldSvg('#888780', false), iconBg: 'gray', title: 'Edge', badge: '', badgeClass: '', desc: 'Full support on Edge Add-ons store.', link: LINKS.edge, btnLabel: 'Edge add-on', btnPrimary: false });
         html += card({ primary: false, iconHtml: shieldSvg('#854F0B', true), iconBg: 'amber', title: 'Chrome — Lite only', badge: 'Limited', badgeClass: 'badge-amber', desc: 'Only uBlock Origin Lite is available for Chrome (Manifest V3).', link: LINKS.ubol, btnLabel: 'Chrome add-on', btnPrimary: false });
       }
 
       cards.innerHTML = html;
-
-      if (noteHTML) {
-        note.style.display = 'block';
-        note.innerHTML = noteHTML;
-      }
+      note.innerHTML = noteHTML;
+      note.style.display = noteHTML ? 'block' : 'none';
     }
 
-    render();
+    const select = document.getElementById('browser-select');
+    select.innerHTML =
+      `<option value="">Auto (${names[detect()]})</option>` +
+      Object.keys(names).map(k => `<option value="${k}">${names[k]}</option>`).join('');
+
+    try {
+      const saved = localStorage.getItem('browserChoice');
+      if (saved && names[saved]) select.value = saved;
+    } catch (e) {}
+
+    select.addEventListener('change', () => {
+      try {
+        if (select.value) localStorage.setItem('browserChoice', select.value);
+        else localStorage.removeItem('browserChoice');
+      } catch (e) {}
+      render(select.value);
+    });
+
+    render(select.value);
   })();
 </script>
 
